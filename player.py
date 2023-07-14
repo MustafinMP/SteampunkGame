@@ -36,7 +36,7 @@ class Player(Sprite):
         self.shadow.rect.x = self.rect.x
         self.shadow.rect.y = self.rect.y + self.rect.height // 3 * 2
 
-    def passive_update(self, size, walls_group, doors_group) -> None:
+    def passive_update(self, size, barriers, doors_group) -> None:
         global x, y
         w, h = size
         self.rect.x, self.rect.y = [w // 2 - self.rect.width // 2,
@@ -46,13 +46,13 @@ class Player(Sprite):
 
         # проверяем возможность перемещения по оси X
         self.shadow.rect.x += self.vector_x
-        if not (spritecollideany(self.shadow, walls_group) or self.collide_doors(doors_group)):
+        if not (spritecollideany(self.shadow, barriers) or self.collide_doors(doors_group)):
             self.position[x] += self.vector_x
         self.shadow.rect.x -= self.vector_x
 
         # проверяем возможность перемещения по оси Y
         self.shadow.rect.y += self.vector_y
-        if not (spritecollideany(self.shadow, walls_group) or self.collide_doors(doors_group)):
+        if not (spritecollideany(self.shadow, barriers) or self.collide_doors(doors_group)):
             self.position[y] += self.vector_y
         self.shadow.rect.y -= self.vector_y
 

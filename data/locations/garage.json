@@ -3,7 +3,7 @@
     148,
     148
   ],
-  "walls": [
+  "barriers": [
     {
       "name": "garage_wall_1.png",
       "coord": [
@@ -47,6 +47,15 @@
       "size": [
         234,
         100
+      ]
+    }
+  ],
+  "shadows": [
+    {
+      "name": "transformer_shadow_1.png",
+      "coord": [
+        173,
+        85
       ]
     }
   ]

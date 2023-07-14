@@ -18,10 +18,11 @@ class GameField:
         self.player_group = Group()
         self.enemies_group = Group()
         self.enemies_hp_group = Group()
-        self.walls_group = Group()
+        self.barriers = Group()
         self.floor_group = Group()
         self.floor_rect_group = []
         self.doors_group = Group()
+        self.shadows_group = Group()
 
         location_data = locations.get(location)
 
@@ -34,8 +35,11 @@ class GameField:
         #     for coords in location_data['floor'][floor_group]:
         #         Floor(coords[0] * STEP, coords[1] * STEP, floor_group + '.png', variance,  self.floor_group)
 
-        for wall in location_data['walls']:
-            Wall(wall['coord'][0] * STEP, wall['coord'][1] * STEP, wall['name'], offset, self.walls_group)
+        for barrier in location_data['barriers']:
+            Barrier(barrier['coord'][0], barrier['coord'][1], barrier['name'], offset, self.barriers)
+
+        for shadow in location_data['shadows']:
+            Floor(shadow['coord'][0], shadow['coord'][1], shadow['name'], offset, self.shadows_group)
 
         for floor in location_data['floor_rect']:
             self.floor_rect_group.append(FloorRect(floor['color'], floor['position'], floor['size'], offset))
@@ -44,7 +48,8 @@ class GameField:
         for floor in self.floor_rect_group:
             floor.draw(screen)
         self.floor_group.draw(screen)
-        self.walls_group.draw(screen)
+        self.shadows_group.draw(screen)
+        self.barriers.draw(screen)
         self.player_group.draw(screen)
         self.enemies_group.draw(screen)
         self.player.draw_hp(screen)
@@ -75,7 +80,7 @@ class GameField:
                         self.player.stop_vector('x')
 
     def passive_update(self, size):
-        self.player.passive_update(size, self.walls_group, self.doors_group)
+        self.player.passive_update(size, self.barriers, self.doors_group)
         offset = self.player.offset()
 
         for floor in self.floor_group.sprites():
@@ -84,7 +89,10 @@ class GameField:
         for floor in self.floor_rect_group:
             floor.passive_update(offset)
 
-        for wall in self.walls_group.sprites():
+        for shadow in self.shadows_group.sprites():
+            shadow.passive_update(offset)
+
+        for wall in self.barriers.sprites():
             wall.passive_update(offset)
 
 
@@ -111,7 +119,7 @@ class Floor(Sprite):
         super().__init__(*group)
         self.image = load_data.load_image(image)
         self.rect = self.image.get_rect()
-        self.position = {'x': x, 'y': y}
+        self.position = {'x': x * STEP, 'y': y * STEP}
         self.rect.x, self.rect.y = x - offset[0], y - offset[1]
 
     def passive_update(self, offset):
@@ -119,12 +127,12 @@ class Floor(Sprite):
         self.rect.y = self.position['y'] - offset[1]
 
 
-class Wall(Sprite):
+class Barrier(Sprite):
     def __init__(self, x, y, image, offset, *group):
         super().__init__(*group)
         self.image = load_data.load_image(image)
         self.rect = self.image.get_rect()
-        self.position = {'x': x, 'y': y}
+        self.position = {'x': x * STEP, 'y': y * STEP}
         self.rect.x, self.rect.y = x - offset[0], y - offset[1]
 
     def passive_update(self, offset):
