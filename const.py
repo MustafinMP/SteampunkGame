@@ -1,0 +1,6 @@
+FPS = 60
+SPEED = 6
+STEP = 3
+WIDTH = 1200
+HEIGHT = 700
+

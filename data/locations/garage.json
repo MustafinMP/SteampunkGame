@@ -1,0 +1,53 @@
+{
+  "start_coord": [
+    148,
+    148
+  ],
+  "walls": [
+    {
+      "name": "garage_wall_1.png",
+      "coord": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "garage_wall_2.png",
+      "coord": [
+        45,
+        1
+      ]
+    },
+    {
+      "name": "garage_wall_3.png",
+      "coord": [
+        88,
+        1
+      ]
+    },
+    {
+      "name": "transformer.png",
+      "coord": [
+        151,
+        85
+      ]
+    }
+  ],
+  "floor_rect": [
+    {
+      "color": [
+        112,
+        99,
+        88
+      ],
+      "position": [
+        0,
+        76
+      ],
+      "size": [
+        234,
+        100
+      ]
+    }
+  ]
+}
