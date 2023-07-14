@@ -6,7 +6,7 @@ import load_data
 import locations
 
 
-class GameField:
+class Scene:
     '''
     Игровое поле.
 

@@ -1,6 +1,6 @@
 import pygame, sys, os
 from buttons import *
-from field import *
+from scene import *
 from menu import *
 from const import *
 

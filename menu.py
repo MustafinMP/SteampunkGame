@@ -2,7 +2,7 @@ import pygame
 from pygame.sprite import Sprite, Group
 import sys
 from buttons import AbstractActionButton
-from field import GameField
+from scene import Scene
 import load_data
 from locations import GARAGE
 
@@ -35,7 +35,7 @@ class StartMenu(AbstractMenu):
         def event_update(self, game, event):
             super().event_update(game, event)
             if self.pressed:
-                game.redirect_to(GameField(GARAGE))
+                game.redirect_to(Scene(GARAGE))
 
     class ExitButton(AbstractActionButton):
         def event_update(self, game, event):
