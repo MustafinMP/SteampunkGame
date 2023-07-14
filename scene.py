@@ -1,5 +1,5 @@
 import pygame
-from pygame.sprite import Sprite, Group
+from pygame.sprite import Sprite, Group, spritecollideany
 from const import *
 import player
 import load_data
@@ -13,8 +13,9 @@ class Scene:
     Отвечает непосредственно за игровой процесс (декорации, игроки, кнопки).
     '''
 
-    def __init__(self, location):
+    def __init__(self, game, location):
         super().__init__()
+        self.game = game
         self.player_group = Group()
         self.enemies_group = Group()
         self.enemies_hp_group = Group()
@@ -23,6 +24,7 @@ class Scene:
         self.floor_rect_group = []
         self.doors_group = Group()
         self.shadows_group = Group()
+        self.redirect_zones = Group()
 
         location_data = locations.get(location)
 
@@ -31,18 +33,29 @@ class Scene:
                                     self.player_group)
 
         offset = self.player.offset()
-        # for floor_group in location_data['floor'].keys():
-        #     for coords in location_data['floor'][floor_group]:
-        #         Floor(coords[0] * STEP, coords[1] * STEP, floor_group + '.png', variance,  self.floor_group)
 
         for barrier in location_data['barriers']:
-            Barrier(barrier['coord'][0], barrier['coord'][1], barrier['name'], offset, self.barriers)
+            Barrier(self.game,
+                    barrier['coord'][0],
+                    barrier['coord'][1],
+                    barrier['name'], offset, self.barriers)
 
         for shadow in location_data['shadows']:
-            Floor(shadow['coord'][0], shadow['coord'][1], shadow['name'], offset, self.shadows_group)
+            Floor(self.game,
+                  shadow['coord'][0],
+                  shadow['coord'][1],
+                  shadow['name'], offset, self.shadows_group)
 
         for floor in location_data['floor_rect']:
-            self.floor_rect_group.append(FloorRect(floor['color'], floor['position'], floor['size'], offset))
+            self.floor_rect_group.append(FloorRect(floor['color'],
+                                                   floor['position'],
+                                                   floor['size'], offset))
+
+        for redirect_zone in location_data['redirect_zones']:
+            RedirectZone(self.game,
+                         redirect_zone['coord'][0],
+                         redirect_zone['coord'][1],
+                         redirect_zone['name'], redirect_zone['redirect_to'], offset, self.redirect_zones)
 
     def draw(self, screen):
         for floor in self.floor_rect_group:
@@ -53,8 +66,9 @@ class Scene:
         self.player_group.draw(screen)
         self.enemies_group.draw(screen)
         self.player.draw_hp(screen)
+        self.redirect_zones.draw(screen)
 
-    def event_update(self, game, event):
+    def event_update(self, event):
         match event.type:
 
             case pygame.KEYDOWN:
@@ -95,6 +109,12 @@ class Scene:
         for wall in self.barriers.sprites():
             wall.passive_update(offset)
 
+        for redirect_zone in self.redirect_zones.sprites():
+            redirect_zone.passive_update(offset)
+            if redirect_zone.is_collided_with(self.player.shadow):
+                redirect_zone.redirect()
+                break
+
 
 class FloorRect:
     def __init__(self, color, position, size, offset):
@@ -115,8 +135,9 @@ class FloorRect:
 
 
 class Floor(Sprite):
-    def __init__(self, x, y, image, offset, *group):
+    def __init__(self, game, x, y, image, offset, *group):
         super().__init__(*group)
+        self.game = game
         self.image = load_data.load_image(image)
         self.rect = self.image.get_rect()
         self.position = {'x': x * STEP, 'y': y * STEP}
@@ -128,8 +149,9 @@ class Floor(Sprite):
 
 
 class Barrier(Sprite):
-    def __init__(self, x, y, image, offset, *group):
+    def __init__(self, game, x, y, image, offset, *group):
         super().__init__(*group)
+        self.game = game
         self.image = load_data.load_image(image)
         self.rect = self.image.get_rect()
         self.position = {'x': x * STEP, 'y': y * STEP}
@@ -141,8 +163,9 @@ class Barrier(Sprite):
 
 
 class Door(Sprite):
-    def __init__(self, x, y, variance, *group):
+    def __init__(self, game, x, y, variance, *group):
         super().__init__(*group)
+        self.game = game
         self.images = {False: load_data.load_image('closed_door.png'),
                        True: load_data.load_image('opened_door.png')}
         self.image = self.images[False]
@@ -154,3 +177,16 @@ class Door(Sprite):
     def ping_the_door(self):
         self.is_opened = not self.is_opened
         self.image = self.images[self.is_opened]
+
+
+class RedirectZone(Floor):
+    def __init__(self, game, x, y, image, redirect_address, offset, *group):
+        super().__init__(game, x, y, image, offset, *group)
+        self.redirect_address = redirect_address
+
+    def redirect(self):
+        redirect_address = locations.get_key(self.redirect_address)
+        self.game.redirect_to(Scene(self.game, redirect_address))
+
+    def is_collided_with(self, sprite):
+        return self.rect.colliderect(sprite.rect)

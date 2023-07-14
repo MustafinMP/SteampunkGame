@@ -58,5 +58,15 @@
         85
       ]
     }
+  ],
+  "redirect_zones": [
+    {
+      "name": "shadow.png",
+      "coord": [
+        60,
+        180
+      ],
+      "redirect_to": "GARAGE_2"
+    }
   ]
 }

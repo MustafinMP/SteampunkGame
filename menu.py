@@ -13,8 +13,9 @@ def terminate():
 
 
 class AbstractMenu:
-    def __init__(self):
+    def __init__(self, game):
         self.buttons = Group()
+        self.game = game
 
     def draw(self, screen):
         self.buttons.draw(screen)
@@ -22,9 +23,9 @@ class AbstractMenu:
     def update(self, args):
         self.buttons.update(args)
 
-    def event_update(self, game, event):
+    def event_update(self, event):
         for button in self.buttons:
-            button.event_update(game, event)
+            button.event_update(self.game, event)
 
     def passive_update(self, size):
         pass
@@ -35,7 +36,7 @@ class StartMenu(AbstractMenu):
         def event_update(self, game, event):
             super().event_update(game, event)
             if self.pressed:
-                game.redirect_to(Scene(GARAGE))
+                game.redirect_to(Scene(game, GARAGE))
 
     class ExitButton(AbstractActionButton):
         def event_update(self, game, event):
@@ -43,8 +44,8 @@ class StartMenu(AbstractMenu):
             if self.pressed:
                 game.terminate()
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, game):
+        super().__init__(game)
         self.start_button = self.StartButton(400, 100, 'start_button.png', 'start_button.png', self.buttons)
         self.exit_button = self.ExitButton(400, 400, 'exit_button.png', 'exit_button.png', self.buttons)
 

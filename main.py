@@ -18,20 +18,20 @@ class Game:
 
     def __init__(self):
         self.game_stack = []
-        self.game_stack.append(StartMenu())
+        self.game_stack.append(StartMenu(self))
 
     def draw(self):
         self.game_stack[-1].draw(screen)
 
     def event_update(self, event):
         """Обработка действий игрока"""
-        self.game_stack[-1].event_update(self, event)
+        self.game_stack[-1].event_update(event)
 
     def passive_update(self, size):
         self.game_stack[-1].passive_update(size)
 
-    def redirect_to(self, menu):
-        self.game_stack.append(menu)
+    def redirect_to(self, object_):
+        self.game_stack.append(object_)
 
     def terminate(self):
         pygame.quit()
