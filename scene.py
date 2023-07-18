@@ -95,7 +95,6 @@ class Scene:
 
     def event_update(self, event):
         match event.type:
-
             case pygame.KEYDOWN:
                 match event.key:
                     case pygame.K_UP:
@@ -106,7 +105,6 @@ class Scene:
                         self.player.keydown(RIGHT)
                     case pygame.K_LEFT:
                         self.player.keydown(LEFT)
-
             case pygame.KEYUP:
                 match event.key:
                     case pygame.K_UP:
