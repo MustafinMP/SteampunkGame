@@ -99,24 +99,24 @@ class Scene:
             case pygame.KEYDOWN:
                 match event.key:
                     case pygame.K_UP:
-                        self.player.update_vector('y', - SPEED)
+                        self.player.keydown(UP)
                     case pygame.K_DOWN:
-                        self.player.update_vector('y', SPEED)
+                        self.player.keydown(DOWN)
                     case pygame.K_RIGHT:
-                        self.player.update_vector('x', SPEED)
+                        self.player.keydown(RIGHT)
                     case pygame.K_LEFT:
-                        self.player.update_vector('x', - SPEED)
+                        self.player.keydown(LEFT)
 
             case pygame.KEYUP:
                 match event.key:
                     case pygame.K_UP:
-                        self.player.stop_vector('y')
+                        self.player.keyup(UP)
                     case pygame.K_DOWN:
-                        self.player.stop_vector('y')
+                        self.player.keyup(DOWN)
                     case pygame.K_RIGHT:
-                        self.player.stop_vector('x')
+                        self.player.keyup(RIGHT)
                     case pygame.K_LEFT:
-                        self.player.stop_vector('x')
+                        self.player.keyup(LEFT)
 
     def passive_update(self, size):
         self.player.passive_update(size, self.barriers, self.doors_group)

@@ -4,3 +4,7 @@ STEP = 3
 WIDTH = 1200
 HEIGHT = 700
 
+RIGHT = 0
+LEFT = 1
+UP = 2
+DOWN = 3

@@ -4,7 +4,6 @@ import load_data
 from const import *
 import color
 
-
 x, y = 0, 1
 
 
@@ -16,11 +15,11 @@ class Player(Sprite):
         self.rect.x, self.rect.y = [WIDTH // 2 - self.rect.width // 2,
                                     HEIGHT // 2 - self.rect.height // 2]
         self.position = position
+
         self.vector_x = 0
         self.vector_y = 0
-
-        self.right = False
-        self.left = False
+        self.key_right = False
+        self.key_left = False
         self.key_up = False
         self.key_down = False
 
@@ -49,6 +48,7 @@ class Player(Sprite):
                                     h // 2 - self.rect.height // 2]
 
         self.update_shadow_coord()
+        self.update_vectors()
 
         # проверяем возможность перемещения по оси X
         self.shadow.rect.x += self.vector_x
@@ -67,25 +67,25 @@ class Player(Sprite):
         return [self.position[x] - self.rect.x,
                 self.position[y] - self.rect.y - self.rect.height + STEP]
 
-    def update_vector(self, axis: str, speed: int) -> None:
+    def update_vectors(self) -> None:
         """Направление движения игрока в пространстве"""
-        match axis:
-            case 'x':
-                if self.vector_x == 0 or speed == self.vector_x:
-                    self.vector_x = speed
-            case 'y':
-                if self.vector_y == 0 or speed == self.vector_y:
-                    self.vector_y = speed
+        # update X vector
+        if self.key_right == self.key_left:
+            self.vector_x = 0
+        elif self.key_right and not self.key_left:
+            self.vector_x = SPEED
+        elif self.key_left and not self.key_right:
+            self.vector_x = -SPEED
+        # update Y vector
+        if self.key_up == self.key_down:
+            self.vector_y = 0
+        elif self.key_up and not self.key_down:
+            self.vector_y = -SPEED
+        elif self.key_down and not self.key_up:
+            self.vector_y = SPEED
 
     def set_coord(self, coord):
         self.position = coord
-
-    def stop_vector(self, axis: str) -> None:
-        match axis:
-            case 'x':
-                self.vector_x = 0
-            case 'y':
-                self.vector_y = 0
 
     def collide_doors(self, doors_group: Group) -> bool:
         return any([not door.is_opened and collide_rect(self, door) for door in doors_group])
@@ -100,6 +100,26 @@ class Player(Sprite):
         pygame.draw.rect(screen,
                          color.RED,
                          (self.rect.x, self.rect.y - 16, self.rect.width * self.hp // self.max_hp, 4), 0)
+
+    def keydown(self, key):
+        if key == LEFT:
+            self.key_left = True
+        elif key == RIGHT:
+            self.key_right = True
+        elif key == UP:
+            self.key_up = True
+        elif key == DOWN:
+            self.key_down = True
+
+    def keyup(self, key):
+        if key == LEFT:
+            self.key_left = False
+        elif key == RIGHT:
+            self.key_right = False
+        elif key == UP:
+            self.key_up = False
+        elif key == DOWN:
+            self.key_down = False
 
 
 class Inventory:
