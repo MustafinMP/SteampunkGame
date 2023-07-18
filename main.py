@@ -4,7 +4,6 @@ from scene import *
 from menu import *
 from const import *
 
-
 size = width, height = WIDTH, HEIGHT
 pygame.init()
 screen = pygame.display.set_mode(size, pygame.RESIZABLE)
@@ -17,21 +16,20 @@ class Game:
     """Главный класс всей игры."""
 
     def __init__(self):
-        self.game_stack = []
-        self.game_stack.append(StartMenu(self))
+        self.widget = StartMenu(self)
 
     def draw(self):
-        self.game_stack[-1].draw(screen)
+        self.widget.draw(screen)
 
     def event_update(self, event):
         """Обработка действий игрока"""
-        self.game_stack[-1].event_update(event)
+        self.widget.event_update(event)
 
     def passive_update(self, size):
-        self.game_stack[-1].passive_update(size)
+        self.widget.passive_update(size)
 
     def redirect_to(self, object_):
-        self.game_stack.append(object_)
+        self.widget = object_
 
     def terminate(self):
         pygame.quit()

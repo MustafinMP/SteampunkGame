@@ -18,6 +18,12 @@ class Player(Sprite):
         self.position = position
         self.vector_x = 0
         self.vector_y = 0
+
+        self.right = False
+        self.left = False
+        self.key_up = False
+        self.key_down = False
+
         self.shadow = None
         self.init_shadow(*group)
 
@@ -70,6 +76,9 @@ class Player(Sprite):
             case 'y':
                 if self.vector_y == 0 or speed == self.vector_y:
                     self.vector_y = speed
+
+    def set_coord(self, coord):
+        self.position = coord
 
     def stop_vector(self, axis: str) -> None:
         match axis:
