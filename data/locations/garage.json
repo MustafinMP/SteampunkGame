@@ -1,33 +1,33 @@
 {
-  "start_coord": [
+  "start_position": [
     148,
     148
   ],
   "barriers": [
     {
       "name": "garage_wall_1.png",
-      "coord": [
+      "position": [
         0,
         0
       ]
     },
     {
       "name": "garage_wall_2.png",
-      "coord": [
+      "position": [
         45,
         1
       ]
     },
     {
       "name": "garage_wall_3.png",
-      "coord": [
+      "position": [
         88,
         1
       ]
     },
     {
       "name": "transformer.png",
-      "coord": [
+      "position": [
         151,
         85
       ]
@@ -53,7 +53,7 @@
   "shadows": [
     {
       "name": "transformer_shadow_1.png",
-      "coord": [
+      "position": [
         173,
         85
       ]
@@ -62,7 +62,7 @@
   "redirect_zones": [
     {
       "name": "shadow.png",
-      "coord": [
+      "position": [
         60,
         180
       ],

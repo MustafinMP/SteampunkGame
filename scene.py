@@ -1,5 +1,6 @@
 import pygame
-from pygame.sprite import Sprite, Group, spritecollideany
+from pygame.sprite import Sprite, Group
+
 from const import *
 import player
 import load_data
@@ -27,14 +28,46 @@ class Scene:
 
         location_data = locations.get(location)
 
-        player_coord = [i * STEP for i in location_data['start_coord']]
+        player_coord = [i * STEP for i in location_data['start_position']]
         self.player = player.Player(player_coord, self.player_group)
 
-        self.init_decorations(location_data)
+        self.__init_decorations(location_data)
 
         self.pause = False
 
-    def reload_scene(self, location):
+    def __init_decorations(self, data: dict) -> None:
+        offset = self.player.offset()
+
+        for barrier in data['barriers']:
+            Barrier(self.game,
+                    barrier['position'],
+                    barrier['name'], offset, self.barriers)
+
+        for shadow in data['shadows']:
+            Floor(self.game,
+                  shadow['position'],
+                  shadow['name'], offset, self.shadows_group)
+
+        for floor in data['floor_rect']:
+            self.floor_rect_group.append(FloorRect(floor['color'],
+                                                   floor['position'],
+                                                   floor['size'], offset))
+
+        for redirect_zone in data['redirect_zones']:
+            RedirectZone(self.game,
+                         redirect_zone['position'],
+                         redirect_zone['name'],
+                         offset,
+                         redirect_zone['redirect_to'], self.redirect_zones)
+
+    def __find_zone_and_redirect(self):
+        for redirect_zone in self.redirect_zones.sprites():
+            if redirect_zone.is_collided_with(self.player.shadow):
+                new_location = redirect_zone.get_redirect_address()
+                self.reload_scene(new_location)
+                break
+
+    def reload_scene(self, location) -> None:
         """Используется для перезагрузки сцены при смене локации"""
         del self.enemies_group, self.enemies_hp_group, self.barriers, self.floor_group
         del self.floor_rect_group, self.doors_group, self.shadows_group, self.redirect_zones
@@ -49,40 +82,14 @@ class Scene:
 
         location_data = locations.get(location)
 
-        player_coord = location_data['start_coord']
-        self.player.set_coord(list(map(lambda i: i * STEP, player_coord)))
+        player_coord = location_data['start_position']
+        self.player.set_position(list(map(lambda i: i * STEP, player_coord)))
 
-        self.init_decorations(location_data)
+        self.__init_decorations(location_data)
 
         self.pause = False
 
-    def init_decorations(self, data):
-        offset = self.player.offset()
-
-        for barrier in data['barriers']:
-            Barrier(self.game,
-                    barrier['coord'][0],
-                    barrier['coord'][1],
-                    barrier['name'], offset, self.barriers)
-
-        for shadow in data['shadows']:
-            Floor(self.game,
-                  shadow['coord'][0],
-                  shadow['coord'][1],
-                  shadow['name'], offset, self.shadows_group)
-
-        for floor in data['floor_rect']:
-            self.floor_rect_group.append(FloorRect(floor['color'],
-                                                   floor['position'],
-                                                   floor['size'], offset))
-
-        for redirect_zone in data['redirect_zones']:
-            RedirectZone(self.game,
-                         redirect_zone['coord'][0],
-                         redirect_zone['coord'][1],
-                         redirect_zone['name'], redirect_zone['redirect_to'], offset, self.redirect_zones)
-
-    def draw(self, screen):
+    def draw(self, screen) -> None:
         for floor in self.floor_rect_group:
             floor.draw(screen)
         self.floor_group.draw(screen)
@@ -92,8 +99,12 @@ class Scene:
         self.enemies_group.draw(screen)
         self.player.draw_hp(screen)
         self.redirect_zones.draw(screen)
+        for redirect_zone in self.redirect_zones.sprites():
+            if redirect_zone.is_collided_with(self.player.shadow):
+                redirect_zone.draw_hint(screen)
 
-    def event_update(self, event):
+    def event_update(self, event) -> None:
+        # обработка клавиш движения
         match event.type:
             case pygame.KEYDOWN:
                 match event.key:
@@ -115,8 +126,12 @@ class Scene:
                         self.player.keyup(RIGHT)
                     case pygame.K_LEFT:
                         self.player.keyup(LEFT)
+        # обработка клавиш взаимодействия
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_e:
+                self.__find_zone_and_redirect()
 
-    def passive_update(self, size):
+    def passive_update(self, size) -> None:
         self.player.passive_update(size, self.barriers, self.doors_group)
         offset = self.player.offset()
 
@@ -132,12 +147,22 @@ class Scene:
         for wall in self.barriers.sprites():
             wall.passive_update(offset)
 
-        for redirect_zone in self.redirect_zones.sprites():
-            redirect_zone.passive_update(offset)
-            if redirect_zone.is_collided_with(self.player.shadow):
-                new_location = redirect_zone.get_redirect_address()
-                self.reload_scene(new_location)
-                break
+        for r_zone in self.redirect_zones.sprites():
+            r_zone.passive_update(offset)
+
+
+class AbstractDecoration(Sprite):
+    def __init__(self, game, position, image, offset, *group):
+        super().__init__(*group)
+        self.game = game
+        self.image = load_data.load_image(image)
+        self.rect = self.image.get_rect()
+        self.position = [axis * STEP for axis in position]
+        self.rect.x, self.rect.y = position[X] - offset[0], position[Y] - offset[1]
+
+    def passive_update(self, offset):
+        self.rect.x = self.position[X] - offset[0]
+        self.rect.y = self.position[Y] - offset[1]
 
 
 class FloorRect:
@@ -158,32 +183,12 @@ class FloorRect:
         self.coord[1] = self.position[1] - offset[1]
 
 
-class Floor(Sprite):
-    def __init__(self, game, x, y, image, offset, *group):
-        super().__init__(*group)
-        self.game = game
-        self.image = load_data.load_image(image)
-        self.rect = self.image.get_rect()
-        self.position = {'x': x * STEP, 'y': y * STEP}
-        self.rect.x, self.rect.y = x - offset[0], y - offset[1]
-
-    def passive_update(self, offset):
-        self.rect.x = self.position['x'] - offset[0]
-        self.rect.y = self.position['y'] - offset[1]
+class Floor(AbstractDecoration):
+    """Объект пола, не восприимчив к столкновениям"""
 
 
-class Barrier(Sprite):
-    def __init__(self, game, x, y, image, offset, *group):
-        super().__init__(*group)
-        self.game = game
-        self.image = load_data.load_image(image)
-        self.rect = self.image.get_rect()
-        self.position = {'x': x * STEP, 'y': y * STEP}
-        self.rect.x, self.rect.y = x - offset[0], y - offset[1]
-
-    def passive_update(self, offset):
-        self.rect.x = self.position['x'] - offset[0]
-        self.rect.y = self.position['y'] - offset[1]
+class Barrier(AbstractDecoration):
+    """Объект любых препятствий, восприимчив к столкновениям"""
 
 
 class Door(Sprite):
@@ -203,10 +208,12 @@ class Door(Sprite):
         self.image = self.images[self.is_opened]
 
 
-class RedirectZone(Floor):
-    def __init__(self, game, x, y, image, redirect_address, offset, *group):
-        super().__init__(game, x, y, image, offset, *group)
+class RedirectZone(AbstractDecoration):
+    def __init__(self, game, position, image, offset, redirect_address, *group):
+        super().__init__(game, position, image, offset, *group)
         self.redirect_address = redirect_address
+        self.hint_group = Group()
+        self.hint_key = Sprite()
 
     def get_redirect_address(self):
         redirect_address = locations.get_key(self.redirect_address)
@@ -214,3 +221,6 @@ class RedirectZone(Floor):
 
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
+
+    def draw_hint(self, screen):
+        return

@@ -87,8 +87,8 @@ class Player(Sprite):
         return [self.position[X] - self.rect.x,
                 self.position[Y] - self.rect.y - self.rect.height + STEP]
 
-    def set_coord(self, coord: [int, int]) -> None:
-        self.position = coord
+    def set_position(self, position: [int, int]) -> None:
+        self.position = position
 
     def draw_hp(self, screen) -> None:
         # не отображаем шкалу здоровья, если оно полное
@@ -126,6 +126,9 @@ class Inventory:
     def __init__(self):
         self.inventory = dict()
 
+    def __getitem__(self, item):
+        return self.inventory[item]
+
     def add(self, item, count=1) -> None:
         if item in self.inventory.keys():
             self.inventory[item] += count
@@ -144,8 +147,4 @@ class Inventory:
                 return real_count
             self.inventory[item] -= count
             return count
-        return 0
-
-
-class HpDisplay:
-    pass  # TODO: сделать класс для отображения ХП
+        raise KeyError

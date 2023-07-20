@@ -1,4 +1,5 @@
 import pygame, sys, os
+
 from buttons import *
 from scene import *
 from menu import *
@@ -49,8 +50,8 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 running = False
                 break
-            game.event_update(event)
-        game.passive_update(size)
+            game.event_update(event)  # обновление событий
+        game.passive_update(size)  # обновление независимо от событий
         game.draw()
         pygame.display.flip()
         clock.tick(FPS)
