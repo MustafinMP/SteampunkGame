@@ -13,10 +13,11 @@ class Player(Sprite):
         super().__init__(*group)
         self.image = load_data.load_image('player_x3.png')
         self.rect = self.image.get_rect()
+        self.position = position
         self.rect.x, self.rect.y = [WIDTH // 2 - self.rect.width // 2,
                                     HEIGHT // 2 - self.rect.height // 2]
         # положение на игровом поле
-        self.position = position
+        # self.position = position
         self.vector_x = 0
         self.vector_y = 0
         self.key_right = False
@@ -41,15 +42,15 @@ class Player(Sprite):
     def __collide_doors(self, doors_group: Group) -> bool:
         return any([not door.is_opened and collide_rect(self, door) for door in doors_group])
 
-    def __move(self, barriers: Group, doors_group: Group) -> None:
+    def __move(self, barriers: Group) -> None:
         """Меняем позицию игрока, если это возможно"""
         self.shadow.rect.x += self.vector_x
-        if not (spritecollideany(self.shadow, barriers) or self.__collide_doors(doors_group)):
+        if not spritecollideany(self.shadow, barriers):
             self.position[X] += self.vector_x
         self.shadow.rect.x -= self.vector_x
 
         self.shadow.rect.y += self.vector_y
-        if not (spritecollideany(self.shadow, barriers) or self.__collide_doors(doors_group)):
+        if not spritecollideany(self.shadow, barriers):
             self.position[Y] += self.vector_y
         self.shadow.rect.y -= self.vector_y
 
@@ -74,18 +75,13 @@ class Player(Sprite):
         elif self.key_down and not self.key_up:
             self.vector_y = SPEED
 
-    def passive_update(self, size, barriers, doors_group) -> None:
+    def passive_update(self, size, barriers) -> None:
         w, h = size
         self.rect.x, self.rect.y = [w // 2 - self.rect.width // 2,
                                     h // 2 - self.rect.height // 2]
         self.__update_shadow_coord()
         self.__update_vectors()
-        self.__move(barriers, doors_group)
-
-    def offset(self) -> [int, int]:
-        """смещение координат игрока на игровом поле относительно фактических координат на экране"""
-        return [self.position[X] - self.rect.x,
-                self.position[Y] - self.rect.y - self.rect.height + STEP]
+        self.__move(barriers)
 
     def set_position(self, position: [int, int]) -> None:
         self.position = position

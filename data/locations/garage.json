@@ -33,24 +33,14 @@
       ]
     }
   ],
-  "floor_rect": [
+  "floor": [
     {
-      "color": [
-        112,
-        99,
-        88
-      ],
+      "name": "garage_floor.png",
       "position": [
         0,
         76
-      ],
-      "size": [
-        234,
-        100
       ]
-    }
-  ],
-  "shadows": [
+    },
     {
       "name": "transformer_shadow_1.png",
       "position": [
