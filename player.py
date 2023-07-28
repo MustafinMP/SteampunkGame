@@ -5,21 +5,83 @@ from const import *
 import color
 
 
+class PlayerImages:
+    STAY = 0
+    ATTACK = 1
+    RUNNING = 2
+
+    def __init__(self):
+        self.iteration = 0
+        self.ITERATION_LIMIT_RUNNING = 4 * ANIMATION_FPS
+        # формируем таблицы изображений
+        self.main_image = load_data.load_image('player.png')
+        self.stay = [
+            self.main_image,
+            self.main_image,
+            self.main_image,
+            self.main_image
+        ]
+        # таблица для бега
+        self.running_up = []
+        self.running_down = [
+            load_data.load_image('running_down_1.png'),
+            self.main_image,
+            load_data.load_image('running_down_3.png'),
+            self.main_image
+        ]
+        self.running_right = []
+        self.running_left = []
+        self.running = {DOWN: self.running_down}
+
+        self.last_move_type = self.STAY
+        self.last_direction = DOWN
+
+    def direction(self, vx, vy):
+        if vx > 0:
+            return RIGHT
+        if vx < 0:
+            return LEFT
+        if vy > 0:
+            return DOWN
+        if vy < 0:
+            return UP
+
+    def update_image(self, move_type, vx=0, vy=0):
+        if move_type == self.STAY:
+            self.iteration = 0
+            self.last_move_type = self.STAY
+            return self.main_image
+
+        direction = self.direction(vx, vy)
+
+        # сброс счетчика итераций при смене типа движений
+        if self.last_move_type != move_type:
+            self.iteration = 0
+
+        if move_type == self.RUNNING:
+            self.iteration += 1
+            if self.iteration == self.ITERATION_LIMIT_RUNNING:
+                self.iteration = 0
+            self.last_move_type = self.RUNNING
+            return self.running[direction][self.iteration // ANIMATION_FPS]
+
+
 class Player(Sprite):
     """Главный класс персонажа.
     Хранит все сведения об нем (позиция на поле, анимации, сценарные характеристики, такие как здоровье), и т.д."""
 
     def __init__(self, position: list, *group) -> None:
         super().__init__(*group)
-        self.image = load_data.load_image('player_x3.png')
+        self.images = PlayerImages()
+        self.image = self.images.main_image
+
         self.rect = self.image.get_rect()
-        self.position = position
         self.rect.x, self.rect.y = [WIDTH // 2 - self.rect.width // 2,
                                     HEIGHT // 2 - self.rect.height // 2]
         # положение на игровом поле
-        # self.position = position
-        self.vector_x = 0
-        self.vector_y = 0
+        self.position = position
+        self.vx = 0
+        self.vy = 0
         self.key_right = False
         self.key_left = False
         self.key_up = False
@@ -44,15 +106,22 @@ class Player(Sprite):
 
     def __move(self, barriers: Group) -> None:
         """Меняем позицию игрока, если это возможно"""
-        self.shadow.rect.x += self.vector_x
+        self.shadow.rect.x += self.vx
         if not spritecollideany(self.shadow, barriers):
-            self.position[X] += self.vector_x
-        self.shadow.rect.x -= self.vector_x
+            self.position[X] += self.vx
+        self.shadow.rect.x -= self.vx
 
-        self.shadow.rect.y += self.vector_y
+        self.shadow.rect.y += self.vy
         if not spritecollideany(self.shadow, barriers):
-            self.position[Y] += self.vector_y
-        self.shadow.rect.y -= self.vector_y
+            self.position[Y] += self.vy
+        self.shadow.rect.y -= self.vy
+
+    def __update_image(self):
+        if self.vx == 0 and  self.vy == 0:
+            image = self.images.update_image(self.images.STAY)
+        else:
+            image = self.images.update_image(self.images.RUNNING, self.vx, self.vy)
+        self.image = image
 
     def __update_shadow_coord(self) -> None:
         self.shadow.rect.x = self.rect.x
@@ -62,18 +131,18 @@ class Player(Sprite):
         """Направление движения игрока в пространстве"""
         # update X vector
         if self.key_right == self.key_left:
-            self.vector_x = 0
+            self.vx = 0
         elif self.key_right and not self.key_left:
-            self.vector_x = SPEED
+            self.vx = SPEED
         elif self.key_left and not self.key_right:
-            self.vector_x = -SPEED
+            self.vx = -SPEED
         # update Y vector
         if self.key_up == self.key_down:
-            self.vector_y = 0
+            self.vy = 0
         elif self.key_up and not self.key_down:
-            self.vector_y = -SPEED
+            self.vy = -SPEED
         elif self.key_down and not self.key_up:
-            self.vector_y = SPEED
+            self.vy = SPEED
 
     def passive_update(self, size, barriers) -> None:
         w, h = size
@@ -82,6 +151,8 @@ class Player(Sprite):
         self.__update_shadow_coord()
         self.__update_vectors()
         self.__move(barriers)
+
+        self.__update_image()
 
     def set_position(self, position: [int, int]) -> None:
         self.position = position

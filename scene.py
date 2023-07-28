@@ -42,28 +42,19 @@ class Scene:
         self.camera.update(self.player)
 
         for barrier in data['barriers']:
-            obj = Barrier(barrier['position'],
-                          barrier['name'],
-                          self.barriers,
-                          self.all_decorations)
+            obj = Barrier(barrier['position'], barrier['name'], self.barriers, self.all_decorations)
             self.camera.apply(obj)
 
         for floor in data['floor']:
-            obj = Floor(floor['position'],
-                        floor['name'],
-                        self.floor_group,
-                        self.all_decorations)
+            obj = Floor(floor['position'], floor['name'], self.floor_group, self.all_decorations)
             self.camera.apply(obj)
 
         for redirect_zone in data['redirect_zones']:
-            obj = RedirectZone(redirect_zone['position'],
-                               redirect_zone['name'],
-                               redirect_zone['redirect_to'],
-                               self.redirect_zones,
-                               self.all_decorations)
+            obj = RedirectZone(redirect_zone['position'], redirect_zone['name'], redirect_zone['redirect_to'],
+                               self.redirect_zones, self.all_decorations)
             self.camera.apply(obj)
 
-    def __find_zone_and_redirect(self):
+    def __redirect(self):
         for redirect_zone in self.redirect_zones.sprites():
             if redirect_zone.is_collided_with(self.player.shadow):
                 new_location = redirect_zone.get_redirect_address()
@@ -125,7 +116,7 @@ class Scene:
         # обработка клавиш взаимодействия
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_e:
-                self.__find_zone_and_redirect()
+                self.__redirect()
 
     def passive_update(self, size) -> None:
         self.player.passive_update(size, self.barriers)
