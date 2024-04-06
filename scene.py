@@ -1,8 +1,6 @@
 import pygame
-from pygame import Rect
 from pygame.sprite import Sprite, Group
 
-import widget
 from const import *
 from camera import Camera
 import player
@@ -123,7 +121,8 @@ class Scene:
 
     def update(self) -> None:
         self.camera.update_screen_size(self.game.screen_size)
-        self.player.passive_update(self.game.screen_size, self.hard_decorations_group)
+
+        self.player.update(self.game.screen_size, self.hard_decorations_group)
         self.camera.update(self.player)
 
         for decoration in self.all_decorations_group.sprites():

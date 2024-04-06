@@ -1,7 +1,5 @@
-import pygame, sys, os
-
-from buttons import *
-# import scene
+import pygame
+import sys
 import menu
 from const import *
 
@@ -10,7 +8,6 @@ pygame.init()
 screen = pygame.display.set_mode(screen_size, pygame.RESIZABLE)
 screen.fill((0, 0, 0))
 clock = pygame.time.Clock()
-lst = []
 
 
 class Game:

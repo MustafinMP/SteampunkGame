@@ -3,68 +3,8 @@ from pygame.sprite import Sprite, Group, collide_rect, spritecollideany
 import load_data
 from const import *
 import color
-from moving_vector import MovingVector, PlayerMovingVector
-
-
-class PlayerImages:
-    STAY = 0
-    ATTACK = 1
-    RUNNING = 2
-
-    def __init__(self):
-        self.iteration = 0
-        self.ITERATION_LIMIT_RUNNING = 4 * ANIMATION_FPS
-        # формируем таблицы изображений
-        self.main_image = load_data.load_image('player.png')
-        self.stay = [
-            self.main_image,
-            self.main_image,
-            self.main_image,
-            self.main_image
-        ]
-        # таблица для бега
-        self.running_up = []
-        self.running_down = [
-            load_data.load_image('running_down_1.png'),
-            self.main_image,
-            load_data.load_image('running_down_3.png'),
-            self.main_image
-        ]
-        self.running_right = []
-        self.running_left = []
-        self.running = {DOWN: self.running_down}
-
-        self.last_move_type = self.STAY
-        self.last_direction = DOWN
-
-    def direction(self, vx, vy):
-        if vx > 0:
-            return RIGHT
-        if vx < 0:
-            return LEFT
-        if vy > 0:
-            return DOWN
-        if vy < 0:
-            return UP
-
-    def update_image(self, move_type, vx=0, vy=0):
-        if move_type == self.STAY:
-            self.iteration = 0
-            self.last_move_type = self.STAY
-            return self.main_image
-
-        direction = self.direction(vx, vy)
-
-        # сброс счетчика итераций при смене типа движений
-        if self.last_move_type != move_type:
-            self.iteration = 0
-
-        if move_type == self.RUNNING:
-            self.iteration += 1
-            if self.iteration == self.ITERATION_LIMIT_RUNNING:
-                self.iteration = 0
-            self.last_move_type = self.RUNNING
-            return self.running[direction][self.iteration // ANIMATION_FPS]
+from moving_vector import PlayerMovingVector
+from player_image_controller import PlayerImageController
 
 
 class PlayerData:
@@ -81,8 +21,8 @@ class PlayerSprite(Sprite):
 
     def __init__(self, game_position: (int, int), *group) -> None:
         super().__init__(*group)
-        self.image = PlayerImages().main_image
-        self.images = PlayerImages()
+        self.images = PlayerImageController()
+        self.image = self.images.main_image
 
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH // 2 - self.rect.width // 2
@@ -127,12 +67,12 @@ class PlayerSprite(Sprite):
         self.shadow.rect.x = self.rect.x
         self.shadow.rect.y = self.rect.y + self.rect.height // 3 * 2
 
-    def passive_update(self, size, barriers) -> None:
+    def update(self, size, barriers) -> None:
         self.__update_shadow_coord()
         self.mv.update()
         self.__move(barriers)
 
-        # self.__update_image()
+        self.__update_image()
 
     def set_position(self, game_position: (int, int)) -> None:
         self.game_position = game_position

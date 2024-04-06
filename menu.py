@@ -10,26 +10,6 @@ from locations import GARAGE
 import widget
 
 
-def terminate():
-    pygame.quit()
-    sys.exit()
-
-
-class AbstractMenu:
-    def __init__(self, game):
-        self.buttons = Group()
-        self.game = game
-
-    def draw(self, screen):
-        self.buttons.draw(screen)
-
-    def update(self, args):
-        self.buttons.update(args)
-
-    def passive_update(self, size):
-        pass
-
-
 class StartMenu(widget.Widget):
     class StartButton(ActionButton):
         def call(self):
