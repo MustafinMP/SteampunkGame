@@ -3,7 +3,7 @@ from pygame.sprite import Sprite, Group
 
 from const import *
 from camera import Camera
-import player
+from player_module import player
 import load_data
 import locations
 

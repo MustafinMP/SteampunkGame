@@ -1,6 +1,6 @@
 import pygame
 import sys
-import menu
+from all_widgets import menu
 from const import *
 
 screen_size = width, height = WIDTH, HEIGHT

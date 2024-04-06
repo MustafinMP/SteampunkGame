@@ -16,9 +16,6 @@ class PlayerData:
 
 
 class PlayerSprite(Sprite):
-    """Главный класс персонажа.
-    Хранит все сведения об нем (позиция на поле, анимации, сценарные характеристики, такие как здоровье), и т.д."""
-
     def __init__(self, game_position: (int, int), *group) -> None:
         super().__init__(*group)
         self.images = PlayerImageController()
@@ -71,7 +68,6 @@ class PlayerSprite(Sprite):
         self.__update_shadow_coord()
         self.mv.update()
         self.__move(barriers)
-
         self.__update_image()
 
     def set_position(self, game_position: (int, int)) -> None:
@@ -81,12 +77,12 @@ class PlayerSprite(Sprite):
         # не отображаем шкалу здоровья, если оно полное
         if self.data.hp == self.data.max_hp:
             return None
-        pygame.draw.rect(screen,
-                         color.GREY,
-                         (self.rect.x, self.rect.y - 16, self.rect.width, 4), 0)
-        pygame.draw.rect(screen,
-                         color.RED,
-                         (self.rect.x, self.rect.y - 16, self.rect.width * self.data.hp // self.data.max_hp, 4), 0)
+        pygame.draw.rect(screen, color.GREY,
+                         (self.rect.x, self.rect.y - 16, self.rect.width, 4),
+                         0)
+        pygame.draw.rect(screen, color.RED,
+                         (self.rect.x, self.rect.y - 16, self.rect.width * self.data.hp // self.data.max_hp, 4),
+                         0)
 
     def keydown(self, key) -> None:
         self.mv.keydown(key)

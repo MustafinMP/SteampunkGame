@@ -1,13 +1,7 @@
-import pygame
-from pygame.sprite import Sprite, Group
-import sys
-
 import main
 from buttons import ActionButton
-import scene
-import load_data
 from locations import GARAGE
-import widget
+from all_widgets import widget, scene
 
 
 class StartMenu(widget.Widget):
