@@ -34,20 +34,7 @@
     }
   ],
   "floor": [
-    {
-      "name": "garage_floor.png",
-      "position": [
-        0,
-        76
-      ]
-    },
-    {
-      "name": "transformer_shadow_1.png",
-      "position": [
-        173,
-        85
-      ]
-    }
+
   ],
   "redirect_zones": [
     {

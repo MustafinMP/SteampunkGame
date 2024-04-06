@@ -2,6 +2,7 @@ import pygame
 from pygame import Rect
 from pygame.sprite import Sprite, Group
 
+import widget
 from const import *
 from camera import Camera
 import player
@@ -19,10 +20,10 @@ class Scene:
     def __init__(self, game, location):
         self.game = game
 
-        self.barriers = Group()
-        self.floor_group = Group()
-        self.redirect_zones = Group()
-        self.all_decorations = Group()
+        self.hard_decorations_group = Group()
+        self.background_decorations_group = Group()
+        self.redirect_zones_group = Group()
+        self.all_decorations_group = Group()
 
         self.player_group = Group()
         self.enemies_group = Group()
@@ -30,7 +31,7 @@ class Scene:
         location_data = locations.get(location)
 
         player_coord = [i * STEP for i in location_data['start_position']]
-        self.player = player.Player(player_coord, self.player_group)
+        self.player = player.PlayerSprite(player_coord, self.player_group)
 
         self.camera = Camera()
 
@@ -42,20 +43,20 @@ class Scene:
         self.camera.update(self.player)
 
         for barrier in data['barriers']:
-            obj = Barrier(barrier['position'], barrier['name'], self.barriers, self.all_decorations)
+            obj = Barrier(barrier['position'], barrier['name'], self.hard_decorations_group, self.all_decorations_group)
             self.camera.apply(obj)
 
         for floor in data['floor']:
-            obj = Floor(floor['position'], floor['name'], self.floor_group, self.all_decorations)
+            obj = Floor(floor['position'], floor['name'], self.background_decorations_group, self.all_decorations_group)
             self.camera.apply(obj)
 
         for redirect_zone in data['redirect_zones']:
             obj = RedirectZone(redirect_zone['position'], redirect_zone['name'], redirect_zone['redirect_to'],
-                               self.redirect_zones, self.all_decorations)
+                               self.redirect_zones_group, self.all_decorations_group)
             self.camera.apply(obj)
 
     def __redirect(self):
-        for redirect_zone in self.redirect_zones.sprites():
+        for redirect_zone in self.redirect_zones_group.sprites():
             if redirect_zone.is_collided_with(self.player.shadow):
                 new_location = redirect_zone.get_redirect_address()
                 self.reload_scene(new_location)
@@ -63,9 +64,9 @@ class Scene:
 
     def reload_scene(self, location) -> None:
         """Используется для перезагрузки сцены при смене локации"""
-        self.barriers = Group()
-        self.floor_group = Group()
-        self.redirect_zones = Group()
+        self.hard_decorations_group = Group()
+        self.background_decorations_group = Group()
+        self.redirect_zones_group = Group()
 
         self.enemies_group = Group()
 
@@ -79,17 +80,19 @@ class Scene:
         self.pause = False
 
     def draw(self, screen) -> None:
-        self.floor_group.draw(screen)
-        self.barriers.draw(screen)
+        self.background_decorations_group.draw(screen)
+        self.hard_decorations_group.draw(screen)
+
         self.player_group.draw(screen)
         self.enemies_group.draw(screen)
-        self.player.draw_hp(screen)
-        self.redirect_zones.draw(screen)
-        for redirect_zone in self.redirect_zones.sprites():
-            if redirect_zone.is_collided_with(self.player.shadow):
-                redirect_zone.draw_hint(screen)
 
-    def event_update(self, event) -> None:
+        self.player.draw_hp(screen)
+        self.redirect_zones_group.draw(screen)
+        for redirect_zone in self.redirect_zones_group.sprites():
+            if redirect_zone.is_collided_with(self.player.shadow):
+                redirect_zone.draw_hint(screen)  # отрисовка подсказки по клавише
+
+    def update_event(self, event) -> None:
         """Обработчик клавиш"""
 
         match event.type:  # обработка клавиш движения
@@ -118,21 +121,21 @@ class Scene:
             if event.key == pygame.K_e:
                 self.__redirect()
 
-    def passive_update(self, size) -> None:
-        self.player.passive_update(size, self.barriers)
+    def update(self, size) -> None:
+        self.player.passive_update(size, self.hard_decorations_group)
         self.camera.update(self.player)
 
-        for decoration in self.all_decorations.sprites():
+        for decoration in self.all_decorations_group.sprites():
             self.camera.apply(decoration)
 
 
 class AbstractDecoration(Sprite):
-    def __init__(self, position, image, *group):
+    def __init__(self, coord: (int, int), image: str, *group):
         super().__init__(*group)
         self.image = load_data.load_image(image)
         self.rect = self.image.get_rect()
-        self.position = [axis * STEP for axis in position]
-        self.rect.x, self.rect.y = position
+        self.game_position = [axis * STEP for axis in coord]
+        self.rect.x, self.rect.y = coord
 
 
 class Floor(AbstractDecoration):

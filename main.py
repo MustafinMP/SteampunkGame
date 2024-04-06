@@ -1,13 +1,13 @@
 import pygame, sys, os
 
 from buttons import *
-from scene import *
-from menu import *
+# import scene
+import menu
 from const import *
 
-size = width, height = WIDTH, HEIGHT
+screen_size = width, height = WIDTH, HEIGHT
 pygame.init()
-screen = pygame.display.set_mode(size, pygame.RESIZABLE)
+screen = pygame.display.set_mode(screen_size, pygame.RESIZABLE)
 screen.fill((0, 0, 0))
 clock = pygame.time.Clock()
 lst = []
@@ -17,22 +17,23 @@ class Game:
     """Главный класс всей игры."""
 
     def __init__(self):
-        self.widget = StartMenu(self)
+        self.widget = menu.StartMenu(self)
 
     def draw(self):
         self.widget.draw(screen)
 
     def event_update(self, event):
         """Обработка действий игрока"""
-        self.widget.event_update(event)
+        self.widget.update_event(event)
 
-    def passive_update(self, size):
-        self.widget.passive_update(size)
+    def update(self, screen_size: (int, int)):
+        self.widget.update(screen_size)
 
     def redirect_to(self, object_):
         self.widget = object_
 
-    def terminate(self):
+    @staticmethod
+    def terminate():
         pygame.quit()
         sys.exit()
 
@@ -44,14 +45,14 @@ if __name__ == '__main__':
         screen.fill((0, 0, 0))
 
         # контроль текущего размера экрана для правильного отображения объектов
-        size = width, height = pygame.display.get_window_size()
+        new_screen_size: (int, int) = pygame.display.get_window_size()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
                 break
             game.event_update(event)  # обновление событий
-        game.passive_update(size)  # обновление независимо от событий
+        game.update(screen_size)  # обновление независимо от событий
         game.draw()
         pygame.display.flip()
         clock.tick(FPS)
