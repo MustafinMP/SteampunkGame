@@ -10,7 +10,7 @@ class Widget:
     def update_event(self, event):
         self.action_buttons.update_event(event)
 
-    def update(self, screen_size: (int, int)):
+    def update(self):
         pass
 
     def draw(self, screen):

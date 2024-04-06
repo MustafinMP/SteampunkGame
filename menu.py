@@ -48,8 +48,8 @@ class StartMenu(widget.Widget):
                                            'exit_button.png', 'exit_button.png',
                                            self.action_buttons)
 
-    def update(self, screen_size: (int, int)):
-        sc_x, sc_y = screen_size
+    def update(self):
+        sc_x, sc_y = self.game.screen_size
         self.start_button.set_coord((sc_x // 2 - 200, (sc_y - 400) // 3))
         self.exit_button.set_coord((sc_x // 2 - 200, (sc_y - 400) // 3 * 2 + 200))
 

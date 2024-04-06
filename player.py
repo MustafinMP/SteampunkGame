@@ -128,9 +128,6 @@ class PlayerSprite(Sprite):
         self.shadow.rect.y = self.rect.y + self.rect.height // 3 * 2
 
     def passive_update(self, size, barriers) -> None:
-        w, h = size
-        self.rect.x, self.rect.y = [w // 2 - self.rect.width // 2,
-                                    h // 2 - self.rect.height // 2]
         self.__update_shadow_coord()
         self.mv.update()
         self.__move(barriers)

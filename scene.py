@@ -121,8 +121,9 @@ class Scene:
             if event.key == pygame.K_e:
                 self.__redirect()
 
-    def update(self, size) -> None:
-        self.player.passive_update(size, self.hard_decorations_group)
+    def update(self) -> None:
+        self.camera.update_screen_size(self.game.screen_size)
+        self.player.passive_update(self.game.screen_size, self.hard_decorations_group)
         self.camera.update(self.player)
 
         for decoration in self.all_decorations_group.sprites():
