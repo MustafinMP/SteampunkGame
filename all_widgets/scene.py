@@ -51,6 +51,7 @@ class Scene:
 
         for redirect_zone in data['redirect_zones']:
             obj = RedirectZone(redirect_zone['position'], redirect_zone['name'], redirect_zone['redirect_to'],
+                               redirect_zone['hint'],
                                self.redirect_zones_group, self.all_decorations_group)
             self.camera.apply(obj)
 
@@ -150,11 +151,18 @@ class Barrier(AbstractDecoration):
 class RedirectZone(AbstractDecoration):
     """Особый объект пола, может сменять текущую локацию"""
 
-    def __init__(self, position, image, redirect_address, *group):
+    def __init__(self, position, image, redirect_address, redirect_image, *group):
         super().__init__(position, image, *group)
         self.redirect_address = redirect_address
         self.hint_group = Group()
-        self.hint_key = Sprite()
+        self.hint_key = Sprite(self.hint_group)
+        self.hint_key.image = load_data.load_image(redirect_image)
+        self.hint_key.rect = self.hint_key.image.get_rect()
+        self.update_hint_coord()
+
+    def update_hint_coord(self):
+        self.hint_key.rect.x = self.rect.center[0] - 16
+        self.hint_key.rect.y = self.rect.center[1] + 32
 
     def get_redirect_address(self):
         redirect_address = locations.get_key(self.redirect_address)
@@ -164,4 +172,5 @@ class RedirectZone(AbstractDecoration):
         return self.rect.colliderect(sprite.rect)
 
     def draw_hint(self, screen):
-        return
+        self.update_hint_coord()
+        self.hint_group.draw(screen)

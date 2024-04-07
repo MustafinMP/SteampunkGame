@@ -49,7 +49,8 @@
         60,
         180
       ],
-      "redirect_to": "GARAGE_2"
+      "redirect_to": "GARAGE_2",
+      "hint": "hint_exit.png"
     }
   ]
 }
