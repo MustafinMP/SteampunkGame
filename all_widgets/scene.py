@@ -122,7 +122,7 @@ class Scene:
     def update(self) -> None:
         self.camera.update_screen_size(self.game.screen_size)
 
-        self.player.update(self.game.screen_size, self.hard_decorations_group)
+        self.player.update(self.hard_decorations_group)
         self.camera.update(self.player)
 
         for decoration in self.all_decorations_group.sprites():

@@ -64,7 +64,7 @@ class PlayerSprite(Sprite):
         self.shadow.rect.x = self.rect.x
         self.shadow.rect.y = self.rect.y + self.rect.height // 3 * 2
 
-    def update(self, size, barriers) -> None:
+    def update(self, barriers: Group) -> None:
         self.__update_shadow_coord()
         self.mv.update()
         self.__move(barriers)

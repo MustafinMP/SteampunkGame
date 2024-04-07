@@ -1,3 +1,5 @@
+from typing import TypeAlias
+
 FPS = 60
 ANIMATION_FPS = 10
 SPEED = 6
