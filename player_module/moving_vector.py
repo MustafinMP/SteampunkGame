@@ -1,13 +1,8 @@
 from const import *
+from geometry_abstractions import Vector
 
 
-class MovingVector:
-    def __init__(self, x: int = 0, y: int = 0):
-        self.x = x
-        self.y = y
-
-
-class PlayerMovingVector(MovingVector):
+class PlayerMovingVector(Vector):
     def __init__(self, x: int = 0, y: int = 0):
         super().__init__(x, y)
         self.key_right = False

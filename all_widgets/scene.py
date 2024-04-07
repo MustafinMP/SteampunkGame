@@ -3,6 +3,7 @@ from pygame.sprite import Sprite, Group
 
 from const import *
 from camera import Camera
+from geometry_abstractions import Position
 from player_module import player
 import load_data
 import locations
@@ -29,7 +30,7 @@ class Scene:
         location_data = locations.get(location)
 
         player_coord = [i * STEP for i in location_data['start_position']]
-        self.player = player.PlayerSprite(player_coord, self.player_group)
+        self.player = player.PlayerSprite(Position(*player_coord), self.player_group)
 
         self.camera = Camera()
 
@@ -71,7 +72,7 @@ class Scene:
         location_data = locations.get(location)
 
         player_coord = location_data['start_position']
-        self.player.set_position(list(map(lambda i: i * STEP, player_coord)))
+        self.player.set_position(Position(*map(lambda i: i * STEP, player_coord)))
 
         self.__init_decorations(location_data)
 
@@ -130,12 +131,12 @@ class Scene:
 
 
 class AbstractDecoration(Sprite):
-    def __init__(self, coord: (int, int), image: str, *group):
+    def __init__(self, position: (int, int), image: str, *group):
         super().__init__(*group)
         self.image = load_data.load_image(image)
         self.rect = self.image.get_rect()
-        self.game_position = [axis * STEP for axis in coord]
-        self.rect.x, self.rect.y = coord
+        self.game_position: Position = Position(*[axis * STEP for axis in position])
+        self.rect.x, self.rect.y = position
 
 
 class Floor(AbstractDecoration):

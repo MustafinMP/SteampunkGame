@@ -35,11 +35,10 @@ class Game:
 
     @staticmethod
     def terminate():
-        pygame.quit()
-        sys.exit()
+        terminate()
 
 
-if __name__ == '__main__':
+def run() -> None:
     game = Game()
     running = True
     while running:
@@ -59,3 +58,12 @@ if __name__ == '__main__':
         game.draw()
         pygame.display.flip()
         clock.tick(FPS)
+
+
+def terminate():
+    pygame.quit()
+    sys.exit()
+
+
+if __name__ == '__main__':
+    run()

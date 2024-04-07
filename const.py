@@ -1,7 +1,6 @@
 from typing import TypeAlias
 
 Key: TypeAlias = int
-Coord: TypeAlias = [int, int]
 
 FPS = 60
 ANIMATION_FPS = 10
