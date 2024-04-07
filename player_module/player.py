@@ -3,8 +3,8 @@ from pygame.sprite import Sprite, Group, collide_rect, spritecollideany
 import load_data
 from const import *
 import color
-from moving_vector import PlayerMovingVector
-from player_image_controller import PlayerImageController
+from player_module.moving_vector import PlayerMovingVector
+from player_module.player_image_controller import PlayerImageController
 
 
 class PlayerData:
@@ -45,12 +45,12 @@ class PlayerSprite(Sprite):
         """Меняем позицию игрока, если это возможно"""
         self.shadow.rect.x += self.mv.x
         if not spritecollideany(self.shadow, barriers):
-            self.game_position[X] += self.mv.x
+            self.game_position[0] += self.mv.x
         self.shadow.rect.x -= self.mv.x
 
         self.shadow.rect.y += self.mv.y
         if not spritecollideany(self.shadow, barriers):
-            self.game_position[Y] += self.mv.y
+            self.game_position[1] += self.mv.y
         self.shadow.rect.y -= self.mv.y
 
     def __update_image(self):
@@ -84,10 +84,10 @@ class PlayerSprite(Sprite):
                          (self.rect.x, self.rect.y - 16, self.rect.width * self.data.hp // self.data.max_hp, 4),
                          0)
 
-    def keydown(self, key) -> None:
+    def keydown(self, key: Key) -> None:
         self.mv.keydown(key)
 
-    def keyup(self, key) -> None:
+    def keyup(self, key: Key) -> None:
         self.mv.keyup(key)
 
 

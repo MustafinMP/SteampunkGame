@@ -1,5 +1,5 @@
 import main
-from buttons import ActionButton
+from all_widgets.buttons import ActionButton
 from locations import GARAGE
 from all_widgets import widget, scene
 

@@ -1,5 +1,5 @@
 import main
-from buttons import ActionButtonsGroup
+from all_widgets.buttons import ActionButtonsGroup
 
 
 class Widget:

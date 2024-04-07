@@ -83,8 +83,8 @@ class Scene:
 
         self.player_group.draw(screen)
         self.enemies_group.draw(screen)
-
         self.player.draw_hp(screen)
+
         self.redirect_zones_group.draw(screen)
         for redirect_zone in self.redirect_zones_group.sprites():
             if redirect_zone.is_collided_with(self.player.shadow):
