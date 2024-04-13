@@ -6,7 +6,10 @@ from const import *
 screen_size = width, height = WIDTH, HEIGHT
 pygame.init()
 screen = pygame.display.set_mode(screen_size, pygame.RESIZABLE)
-screen.fill((0, 0, 0))
+
+background_color = (20, 20, 20)
+
+screen.fill(background_color)
 clock = pygame.time.Clock()
 
 
@@ -42,7 +45,7 @@ def run() -> None:
     game = Game()
     running = True
     while running:
-        screen.fill((0, 0, 0))
+        screen.fill(background_color)
 
         # контроль текущего размера экрана для правильного отображения объектов
         new_screen_size: (int, int) = pygame.display.get_window_size()

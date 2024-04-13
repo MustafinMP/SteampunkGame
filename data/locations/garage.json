@@ -40,6 +40,10 @@
         173,
         85
       ]
+    },
+    {
+      "name": "garage_floor.png",
+      "position": [0, 85]
     }
   ],
   "redirect_zones": [
@@ -47,7 +51,7 @@
       "name": "shadow.png",
       "position": [
         60,
-        180
+        175
       ],
       "redirect_to": "GARAGE_2",
       "hint": "hint_exit.png"

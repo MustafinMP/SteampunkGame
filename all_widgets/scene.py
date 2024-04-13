@@ -30,7 +30,7 @@ class Scene:
         location_data = locations.get(location)
 
         player_coord = [i * STEP for i in location_data['start_position']]
-        self.player = player.PlayerSprite(Position(*player_coord), self.player_group)
+        self.player = player.PlayerSprite(Position(*player_coord), self, self.player_group)
 
         self.camera = Camera()
 

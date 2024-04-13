@@ -17,8 +17,9 @@ class PlayerData:
 
 
 class PlayerSprite(Sprite):
-    def __init__(self, game_position: Position, *group) -> None:
+    def __init__(self, game_position: Position, scene, *group) -> None:
         super().__init__(*group)
+        self.scene = scene
         self.images = PlayerImageController()
         self.image = self.images.main_image
 
