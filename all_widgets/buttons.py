@@ -12,7 +12,7 @@ class ActionButtonsGroup(Group):
                 button.leave()
 
 
-class AbstractButton(pygame.sprite.Sprite):
+class AbstractButton(Sprite):
     def __init__(self, coord: (int, int), image, *group):
         super().__init__(*group)
         self.image = load_data.load_image(image)
@@ -23,7 +23,7 @@ class AbstractButton(pygame.sprite.Sprite):
         return self.rect.collidepoint(pos)
 
 
-class ActionButton(pygame.sprite.Sprite):
+class ActionButton(Sprite):
     def __init__(self, widget, coord: (int, int), pressed_image, not_pressed_image, *group):
         super().__init__(*group)
 

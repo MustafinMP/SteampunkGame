@@ -1,8 +1,7 @@
 import pygame
 from pygame.sprite import Sprite, Group, collide_rect, spritecollideany
 import load_data
-from const import *
-import color
+from const import WIDTH, HEIGHT, Colors, Key
 from player_module.moving_vector import PlayerMovingVector
 from player_module.player_image_controller import PlayerImageController
 from geometry_abstractions import Position
@@ -79,10 +78,10 @@ class PlayerSprite(Sprite):
         # не отображаем шкалу здоровья, если оно полное
         if self.data.hp == self.data.max_hp:
             return None
-        pygame.draw.rect(screen, color.GREY,
+        pygame.draw.rect(screen, Colors.grey,
                          (self.rect.x, self.rect.y - 16, self.rect.width, 4),
                          0)
-        pygame.draw.rect(screen, color.RED,
+        pygame.draw.rect(screen, Colors.red,
                          (self.rect.x, self.rect.y - 16, self.rect.width * self.data.hp // self.data.max_hp, 4),
                          0)
 

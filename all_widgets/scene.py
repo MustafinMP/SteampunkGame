@@ -1,7 +1,7 @@
 import pygame
 from pygame.sprite import Sprite, Group
 
-from const import *
+from const import STEP, UP, DOWN, RIGHT, LEFT
 from camera import Camera
 from geometry_abstractions import Position
 from player_module import player
