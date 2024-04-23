@@ -1,7 +1,7 @@
 import pygame
 from pygame.sprite import Sprite, Group
 
-from const import STEP, UP, DOWN, RIGHT, LEFT
+from const import RATIO, UP, DOWN, RIGHT, LEFT
 from camera import Camera
 from geometry_abstractions import Position
 from player_module import player
@@ -29,7 +29,7 @@ class Scene:
 
         location_data = locations.get(location)
 
-        player_coord = [i * STEP for i in location_data['start_position']]
+        player_coord = [i * RATIO for i in location_data['start_position']]
         self.player = player.PlayerSprite(Position(*player_coord), self, self.player_group)
 
         self.camera = Camera()
@@ -73,7 +73,7 @@ class Scene:
         location_data = locations.get(location)
 
         player_coord = location_data['start_position']
-        self.player.set_position(Position(*map(lambda i: i * STEP, player_coord)))
+        self.player.set_position(Position(*map(lambda i: i * RATIO, player_coord)))
 
         self.__init_decorations(location_data)
 
@@ -136,7 +136,7 @@ class AbstractDecoration(Sprite):
         super().__init__(*group)
         self.image = load_data.load_image(image)
         self.rect = self.image.get_rect()
-        self.game_position: Position = Position(*[axis * STEP for axis in position])
+        self.game_position: Position = Position(*[axis * RATIO for axis in position])
         self.rect.x, self.rect.y = position
 
 

@@ -5,6 +5,55 @@
   ],
   "barriers": [
     {
+      "name": "border_v.png",
+      "position": [
+        -16,
+        120
+      ]
+    },
+    {
+      "name": "border_v.png",
+      "position": [
+        234,
+        120
+      ]
+    },
+    {
+      "name": "border_v.png",
+      "position": [
+        234,
+        56
+      ]
+    },
+    {
+      "name": "border_g.png",
+      "position": [
+        0,
+        185
+      ]
+    },
+    {
+      "name": "border_g.png",
+      "position": [
+        64,
+        185
+      ]
+    },
+    {
+      "name": "border_g.png",
+      "position": [
+        128,
+        185
+      ]
+    },
+    {
+      "name": "border_g.png",
+      "position": [
+        192,
+        185
+      ]
+    },
+    {
       "name": "garage_wall_1.png",
       "position": [
         0,
@@ -43,7 +92,10 @@
     },
     {
       "name": "garage_floor.png",
-      "position": [0, 85]
+      "position": [
+        0,
+        85
+      ]
     }
   ],
   "redirect_zones": [

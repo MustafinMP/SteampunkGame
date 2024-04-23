@@ -1,4 +1,4 @@
-from const import STEP
+from const import RATIO
 
 
 class Camera:
@@ -24,7 +24,7 @@ class Camera:
         self.target.rect.y = h // 2 - self.target.rect.height // 2
         try:
             self.dx = -(target.game_position.x - target.rect.x)
-            self.dy = -(target.game_position.y - target.rect.y - target.rect.height + STEP)
+            self.dy = -(target.game_position.y - target.rect.y - target.rect.height + RATIO)
         except AttributeError:
             print(type(target.game_position), target.game_position, type(target))
 
