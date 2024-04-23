@@ -3,6 +3,7 @@ from all_widgets.buttons import ActionButtonsGroup
 
 
 class Widget:
+    """Базовый класс всех виджетов"""
     def __init__(self, game: main.Game):
         self.game: main.Game = game
         self.action_buttons = ActionButtonsGroup()

@@ -21,6 +21,7 @@ class StartMenu(widget.Widget):
         self.exit_button.set_coord((sc_x // 2 - 200, (sc_y - 400) // 3 * 2 + 200))
 
     def redirect_to_garage(self):
+        """Перемещение в стартовую сцену"""
         self.game.redirect_to(scene.Scene(self.game, GARAGE))
 
     def terminate_game(self):

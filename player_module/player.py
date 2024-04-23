@@ -7,7 +7,7 @@ from player_module.player_image_controller import PlayerImageController
 from geometry_abstractions import Position
 
 
-class PlayerData:
+class PlayerData:  # переместить в другое место, отвязать от сцены и спрайта игрока, привязать к классу игры
     def __init__(self):
         self.hp = 10
         self.max_hp = 10
@@ -92,7 +92,7 @@ class PlayerSprite(Sprite):
         self.mv.keyup(key)
 
 
-class Inventory:
+class Inventory:  # переместить в отдельный файл
     def __init__(self):
         self.inventory = dict()
 

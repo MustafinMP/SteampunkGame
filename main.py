@@ -31,8 +31,8 @@ class Game:
     def update_screen_size(self, new_screen_size: (int, int)):
         self.screen_size = new_screen_size
 
-    def redirect_to(self, object_):
-        self.widget = object_
+    def redirect_to(self, widget_):
+        self.widget = widget_
 
     @staticmethod
     def terminate():

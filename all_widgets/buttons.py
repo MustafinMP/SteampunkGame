@@ -12,17 +12,6 @@ class ActionButtonsGroup(Group):
                 button.leave()
 
 
-class AbstractButton(Sprite):
-    def __init__(self, coord: (int, int), image, *group):
-        super().__init__(*group)
-        self.image = load_data.load_image(image)
-        self.rect = self.image.get_rect()
-        self.rect.x, self.rect.y = coord
-
-    def collide(self, pos: (int, int)) -> bool:
-        return self.rect.collidepoint(pos)
-
-
 class ActionButton(Sprite):
     def __init__(self, widget, coord: (int, int), pressed_image, not_pressed_image, *group):
         super().__init__(*group)
