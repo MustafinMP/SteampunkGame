@@ -36,26 +36,30 @@ class ActionButton(Sprite):
         self.image = self.images[self.pressed]
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = coord
+        self.action_func = lambda: ...
 
-    def click(self):
+    def set_coord(self, new_coord: (int, int)) -> None:
+        self.rect.x, self.rect.y = new_coord
+
+    def set_action(self, func: object) -> None:
+        self.action_func = func
+
+    def click(self) -> None:
         self.pressed = True
         self.image = self.images[self.pressed]
         self.call()
 
-    def leave(self):
+    def leave(self) -> None:
         self.pressed = False
         self.image = self.images[self.pressed]
 
-    def is_pressed(self):
+    def is_pressed(self) -> bool:
         return self.pressed
 
     def collide(self, pos: (int, int)) -> bool:
         return self.rect.collidepoint(pos)
 
-    def set_coord(self, new_coord: (int, int)):
-        self.rect.x, self.rect.y = new_coord
-
     def call(self):
-        pass
+        self.action_func()
 
 

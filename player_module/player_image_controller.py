@@ -28,23 +28,23 @@ class PlayerImageController:
         ]
         self.running_right = []
         self.running_left = []
-        self.running = {DOWN: self.running_down,
-                        UP: self.running_down,
-                        LEFT: self.running_down,
-                        RIGHT: self.running_down}
+        self.running = {Keys.DOWN: self.running_down,
+                        Keys.UP: self.running_down,
+                        Keys.LEFT: self.running_down,
+                        Keys.RIGHT: self.running_down}
 
         self.last_move_type = self.STAY
-        self.last_direction = DOWN
+        self.last_direction = Keys.DOWN
 
     def direction(self, vx, vy):
         if vx > 0:
-            return RIGHT
+            return Keys.RIGHT
         if vx < 0:
-            return LEFT
+            return Keys.LEFT
         if vy > 0:
-            return DOWN
+            return Keys.DOWN
         if vy < 0:
-            return UP
+            return Keys.UP
 
     def update_image(self, move_type, vx=0, vy=0):
         if move_type == self.STAY:

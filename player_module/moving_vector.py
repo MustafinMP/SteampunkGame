@@ -1,4 +1,4 @@
-from const import *
+from const import Keys, Key, SPEED
 from geometry_abstractions import Vector
 
 
@@ -10,24 +10,24 @@ class PlayerMovingVector(Vector):
         self.key_up = False
         self.key_down = False
 
-    def keydown(self, key) -> None:
-        if key == LEFT:
+    def keydown(self, key: Key) -> None:
+        if key == Keys.LEFT:
             self.key_left = True
-        elif key == RIGHT:
+        elif key == Keys.RIGHT:
             self.key_right = True
-        elif key == UP:
+        elif key == Keys.UP:
             self.key_up = True
-        elif key == DOWN:
+        elif key == Keys.DOWN:
             self.key_down = True
 
     def keyup(self, key) -> None:
-        if key == LEFT:
+        if key == Keys.LEFT:
             self.key_left = False
-        elif key == RIGHT:
+        elif key == Keys.RIGHT:
             self.key_right = False
-        elif key == UP:
+        elif key == Keys.UP:
             self.key_up = False
-        elif key == DOWN:
+        elif key == Keys.DOWN:
             self.key_down = False
 
     def update(self) -> None:

@@ -11,10 +11,11 @@ WIDTH = 1200
 HEIGHT = 700
 
 
-RIGHT: Key = 0
-LEFT: Key = 1
-UP: Key = 2
-DOWN: Key = 3
+class Keys:
+    RIGHT: Key = 0
+    LEFT: Key = 1
+    UP: Key = 2
+    DOWN: Key = 3
 
 
 class Colors:

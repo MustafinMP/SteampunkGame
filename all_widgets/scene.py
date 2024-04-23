@@ -1,7 +1,7 @@
 import pygame
 from pygame.sprite import Sprite, Group
 
-from const import RATIO, UP, DOWN, RIGHT, LEFT
+from const import RATIO, Keys
 from camera import Camera
 from geometry_abstractions import Position
 from player_module import player
@@ -99,23 +99,23 @@ class Scene:
             case pygame.KEYDOWN:
                 match event.key:
                     case pygame.K_UP:
-                        self.player.keydown(UP)
+                        self.player.keydown(Keys.UP)
                     case pygame.K_DOWN:
-                        self.player.keydown(DOWN)
+                        self.player.keydown(Keys.DOWN)
                     case pygame.K_RIGHT:
-                        self.player.keydown(RIGHT)
+                        self.player.keydown(Keys.RIGHT)
                     case pygame.K_LEFT:
-                        self.player.keydown(LEFT)
+                        self.player.keydown(Keys.LEFT)
             case pygame.KEYUP:
                 match event.key:
                     case pygame.K_UP:
-                        self.player.keyup(UP)
+                        self.player.keyup(Keys.UP)
                     case pygame.K_DOWN:
-                        self.player.keyup(DOWN)
+                        self.player.keyup(Keys.DOWN)
                     case pygame.K_RIGHT:
-                        self.player.keyup(RIGHT)
+                        self.player.keyup(Keys.RIGHT)
                     case pygame.K_LEFT:
-                        self.player.keyup(LEFT)
+                        self.player.keyup(Keys.LEFT)
         # обработка клавиш взаимодействия
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_e:
