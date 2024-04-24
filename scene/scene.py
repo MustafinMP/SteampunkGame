@@ -1,11 +1,11 @@
 import pygame
-from pygame.sprite import Sprite, Group
+from pygame.sprite import Group
 
+from scene.decorations import Barrier, Floor, RedirectZone
 from const import RATIO, Keys
 from camera import Camera
 from geometry_abstractions import Position
 from player_module import player
-import load_data
 import locations
 
 
@@ -27,7 +27,7 @@ class Scene:
         self.player_group = Group()
         self.enemies_group = Group()
 
-        location_data = locations.get(location)
+        location_data = locations.get_location_data(location)
 
         player_coord = [i * RATIO for i in location_data['start_position']]
         self.player = player.PlayerSprite(Position(*player_coord), self, self.player_group)
@@ -42,17 +42,20 @@ class Scene:
         self.camera.update(self.player)
         directory = data['directory']
         for barrier in data['barriers']:
-            obj = Barrier(barrier['position'], directory + barrier['name'], self.hard_decorations_group,
+            obj = Barrier(Position(*[axis * RATIO for axis in barrier['position']]), directory + barrier['name'],
+                          self.hard_decorations_group,
                           self.all_decorations_group)
             self.camera.apply(obj)
 
         for floor in data['floor']:
-            obj = Floor(floor['position'], directory + floor['name'], self.background_decorations_group,
+            obj = Floor(Position(*[axis * RATIO for axis in floor['position']]), directory + floor['name'],
+                        self.background_decorations_group,
                         self.all_decorations_group)
             self.camera.apply(obj)
 
         for redirect_zone in data['redirect_zones']:
-            obj = RedirectZone(redirect_zone['position'], directory + redirect_zone['name'],
+            obj = RedirectZone(Position(*[axis * RATIO for axis in redirect_zone['position']]),
+                               directory + redirect_zone['name'],
                                redirect_zone['redirect_to'],
                                redirect_zone['hint'],
                                self.redirect_zones_group, self.all_decorations_group)
@@ -73,7 +76,7 @@ class Scene:
 
         self.enemies_group = Group()
 
-        location_data = locations.get(location)
+        location_data = locations.get_location_data(location)
 
         player_coord = location_data['start_position']
         self.player.set_position(Position(*map(lambda i: i * RATIO, player_coord)))
@@ -132,48 +135,3 @@ class Scene:
 
         for decoration in self.all_decorations_group.sprites():
             self.camera.apply(decoration)
-
-
-class AbstractDecoration(Sprite):
-    def __init__(self, position: (int, int), image: str, *group):
-        super().__init__(*group)
-        self.image = load_data.load_image(image)
-        self.rect = self.image.get_rect()
-        self.game_position: Position = Position(*[axis * RATIO for axis in position])
-        self.rect.x, self.rect.y = position
-
-
-class Floor(AbstractDecoration):
-    """Объект пола, не восприимчив к столкновениям"""
-
-
-class Barrier(AbstractDecoration):
-    """Объект любых препятствий, восприимчив к столкновениям"""
-
-
-class RedirectZone(AbstractDecoration):
-    """Особый объект пола, может сменять текущую локацию"""
-
-    def __init__(self, position, image, redirect_address, redirect_image, *group):
-        super().__init__(position, image, *group)
-        self.redirect_address = redirect_address
-        self.hint_group = Group()
-        self.hint_key = Sprite(self.hint_group)
-        self.hint_key.image = load_data.load_image(redirect_image)
-        self.hint_key.rect = self.hint_key.image.get_rect()
-        self.update_hint_coord()
-
-    def update_hint_coord(self):
-        self.hint_key.rect.x = self.rect.center[0] - 16
-        self.hint_key.rect.y = self.rect.center[1] + 32
-
-    def get_redirect_address(self):
-        redirect_address = locations.get_key(self.redirect_address)
-        return redirect_address
-
-    def is_collided_with(self, sprite):
-        return self.rect.colliderect(sprite.rect)
-
-    def draw_hint(self, screen):
-        self.update_hint_coord()
-        self.hint_group.draw(screen)

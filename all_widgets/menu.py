@@ -1,8 +1,9 @@
 import pygame
 import main
-from all_widgets.buttons import ActionButton, KeyAction, Group
+from all_widgets.buttons import KeyAction, Group
 from locations import GARAGE
-from all_widgets import widget, scene
+from all_widgets import widget
+from scene import scene
 from const import Colors
 
 
