@@ -3,6 +3,7 @@
     148,
     148
   ],
+  "directory": "garage/",
   "barriers": [
     {
       "name": "border_v.png",
@@ -84,16 +85,16 @@
   ],
   "floor": [
     {
-      "name": "transformer_shadow_1.png",
+      "name": "garage_floor.png",
       "position": [
-        173,
+        0,
         85
       ]
     },
     {
-      "name": "garage_floor.png",
+      "name": "transformer_shadow_1.png",
       "position": [
-        0,
+        173,
         85
       ]
     }

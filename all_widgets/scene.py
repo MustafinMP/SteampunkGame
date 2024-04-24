@@ -40,17 +40,20 @@ class Scene:
 
     def __init_decorations(self, data: dict) -> None:
         self.camera.update(self.player)
-
+        directory = data['directory']
         for barrier in data['barriers']:
-            obj = Barrier(barrier['position'], barrier['name'], self.hard_decorations_group, self.all_decorations_group)
+            obj = Barrier(barrier['position'], directory + barrier['name'], self.hard_decorations_group,
+                          self.all_decorations_group)
             self.camera.apply(obj)
 
         for floor in data['floor']:
-            obj = Floor(floor['position'], floor['name'], self.background_decorations_group, self.all_decorations_group)
+            obj = Floor(floor['position'], directory + floor['name'], self.background_decorations_group,
+                        self.all_decorations_group)
             self.camera.apply(obj)
 
         for redirect_zone in data['redirect_zones']:
-            obj = RedirectZone(redirect_zone['position'], redirect_zone['name'], redirect_zone['redirect_to'],
+            obj = RedirectZone(redirect_zone['position'], directory + redirect_zone['name'],
+                               redirect_zone['redirect_to'],
                                redirect_zone['hint'],
                                self.redirect_zones_group, self.all_decorations_group)
             self.camera.apply(obj)
