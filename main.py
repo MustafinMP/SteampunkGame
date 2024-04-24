@@ -1,13 +1,13 @@
 import pygame
 import sys
 from all_widgets import menu
-from const import WIDTH, HEIGHT, FPS, Colors
+from const import WIDTH, HEIGHT, FPS, Colors, Color
 
 screen_size = width, height = WIDTH, HEIGHT
 pygame.init()
 screen = pygame.display.set_mode(screen_size, pygame.RESIZABLE)
 
-screen.fill(Colors.background)
+screen.fill(Colors.default)
 clock = pygame.time.Clock()
 
 
@@ -15,7 +15,7 @@ class Game:
     """Главный класс всей игры."""
 
     def __init__(self):
-        self.widget = menu.StartMenu(self)
+        self.widget = menu.KeyStartMenu(self)
         self.screen_size = screen_size
 
     def draw(self):
@@ -34,6 +34,9 @@ class Game:
     def redirect_to(self, widget_):
         self.widget = widget_
 
+    def background_color(self) -> Color:
+        return self.widget.background_color
+
     @staticmethod
     def terminate():
         terminate()
@@ -43,7 +46,7 @@ def run() -> None:
     game = Game()
     running = True
     while running:
-        screen.fill(Colors.background)
+        screen.fill(Colors.default)
 
         # контроль текущего размера экрана для правильного отображения объектов
         new_screen_size: (int, int) = pygame.display.get_window_size()

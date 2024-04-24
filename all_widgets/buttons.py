@@ -52,3 +52,30 @@ class ActionButton(Sprite):
         self.action_func()
 
 
+class KeyAction(Sprite):
+    def __init__(self, widget, coord: (int, int), current_image, not_current_image, *group, action=lambda: ...):
+        super().__init__(*group)
+
+        self.widget = widget
+
+        self.images = {True: load_data.load_image(current_image),
+                       False: load_data.load_image(not_current_image)
+                       }
+        self.current = False
+        self.image = self.images[self.current]
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = coord
+        self.action_func = action
+
+    def set_status(self, current: bool):
+        self.current = current
+        self.image = self.images[self.current]
+
+    def set_action(self, func: object) -> None:
+        self.action_func = func
+
+    def set_coord(self, new_coord: (int, int)) -> None:
+        self.rect.x, self.rect.y = new_coord
+
+    def call(self):
+        self.action_func()

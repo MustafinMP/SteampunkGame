@@ -1,5 +1,6 @@
 import main
 from all_widgets.buttons import ActionButtonsGroup
+from const import Colors, Color
 
 
 class Widget:
@@ -7,6 +8,7 @@ class Widget:
     def __init__(self, game: main.Game):
         self.game: main.Game = game
         self.action_buttons = ActionButtonsGroup()
+        self.background_color: Color = Colors.default
 
     def update_event(self, event):
         self.action_buttons.update_event(event)

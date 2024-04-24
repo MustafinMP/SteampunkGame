@@ -21,4 +21,5 @@ class Keys:
 class Colors:
     red = Color(180, 0, 0)
     grey = Color(100, 100, 100)
-    background = Color(20, 20, 20)
+    default = Color(20, 20, 20)
+    dark_grey = Color(36, 36, 36)
