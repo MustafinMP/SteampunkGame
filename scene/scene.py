@@ -98,32 +98,22 @@ class Scene:
 
     def update_event(self, event) -> None:
         """Обработчик клавиш"""
-
-        match event.type:  # обработка клавиш движения
-            case pygame.KEYDOWN:
-                match event.key:
-                    case pygame.K_UP:
-                        self.player.keydown(Keys.UP)
-                    case pygame.K_DOWN:
-                        self.player.keydown(Keys.DOWN)
-                    case pygame.K_RIGHT:
-                        self.player.keydown(Keys.RIGHT)
-                    case pygame.K_LEFT:
-                        self.player.keydown(Keys.LEFT)
-            case pygame.KEYUP:
-                match event.key:
-                    case pygame.K_UP:
-                        self.player.keyup(Keys.UP)
-                    case pygame.K_DOWN:
-                        self.player.keyup(Keys.DOWN)
-                    case pygame.K_RIGHT:
-                        self.player.keyup(Keys.RIGHT)
-                    case pygame.K_LEFT:
-                        self.player.keyup(Keys.LEFT)
-        # обработка клавиш взаимодействия
+        move_keys = {
+            pygame.K_UP: Keys.UP,
+            pygame.K_DOWN: Keys.DOWN,
+            pygame.K_RIGHT: Keys.RIGHT,
+            pygame.K_LEFT: Keys.LEFT,
+        }
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_e:
+            if event.key in move_keys.keys():
+                self.player.keydown(move_keys[event.key])
+            if event.key == pygame.K_e:  # обработка клавиш взаимодействия
                 self.__update_action_places()
+
+        elif event.type == pygame.KEYUP:
+            if event.key in move_keys.keys():
+                self.player.keydown(move_keys[event.key])
+
 
     def update(self) -> None:
         self.camera.update_screen_size(self.game.screen_size)
