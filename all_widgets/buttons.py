@@ -13,7 +13,7 @@ class ActionButtonsGroup(Group):
 
 
 class ActionButton(Sprite):
-    def __init__(self, widget, coord: (int, int), pressed_image, not_pressed_image, *group):
+    def __init__(self, widget, pressed_image, not_pressed_image, *group):
         super().__init__(*group)
 
         self.widget = widget
@@ -24,7 +24,6 @@ class ActionButton(Sprite):
         self.pressed = False
         self.image = self.images[self.pressed]
         self.rect = self.image.get_rect()
-        self.rect.x, self.rect.y = coord
         self.action_func = lambda: ...
 
     def set_coord(self, new_coord: (int, int)) -> None:

@@ -60,13 +60,13 @@ class Scene:
             obj.set_action(action, *action_place['args'])
             self.camera.apply(obj)
 
-    def __update_action_places(self):
+    def __update_action_places(self) -> None:
         for action_place in self.action_places_group.sprites():
             if action_place.is_collided_with(self.player.shadow):
                 action_place.call_action()
                 break
 
-    def reload_scene(self, location) -> None:
+    def reload_scene(self, location_name: str) -> None:
         """Используется для перезагрузки сцены при смене локации"""
         self.hard_decorations_group = Group()
         self.background_decorations_group = Group()
@@ -74,7 +74,7 @@ class Scene:
 
         self.enemies_group = Group()
 
-        location_data = locations.get_location_data(location)
+        location_data = locations.get_location_data(location_name)
 
         player_coord = location_data['start_position']
         self.player.set_position(list(map(lambda i: i * RATIO, player_coord)))
@@ -112,8 +112,7 @@ class Scene:
 
         elif event.type == pygame.KEYUP:
             if event.key in move_keys.keys():
-                self.player.keydown(move_keys[event.key])
-
+                self.player.keyup(move_keys[event.key])
 
     def update(self) -> None:
         self.camera.update_screen_size(self.game.screen_size)
