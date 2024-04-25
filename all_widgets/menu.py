@@ -42,15 +42,15 @@ class StartMenu(widget.Widget):
     def __init__(self, game: main.Game):
         super().__init__(game)
         self.start_button = ActionButton(self,
-                                         'buttons/not_current_play_button.png',
-                                         'buttons/not_current_play_button.png',
+                                         'buttons/play_button.png',
+                                         'buttons/play_button.png',
                                          self.action_buttons)
         self.start_button.set_coord((400, 100))
         self.start_button.set_action(self.redirect_to_garage)
 
         self.exit_button = ActionButton(self,
-                                        'buttons/not_current_exit_button.png',
-                                        'buttons/not_current_exit_button.png',
+                                        'buttons/exit_button.png',
+                                        'buttons/exit_button.png',
                                         self.action_buttons)
         self.exit_button.set_coord((400, 400))
         self.exit_button.set_action(self.terminate_game)

@@ -93,7 +93,7 @@ class Scene:
         if event.type == pygame.KEYDOWN:
             if event.key in move_keys.keys():
                 self.player.keydown(move_keys[event.key])
-            if event.key == pygame.K_e:  # обработка клавиш взаимодействия
+            if event.key == pygame.K_a:  # обработка клавиш взаимодействия
                 self.__update_action_places()
 
         elif event.type == pygame.KEYUP:
@@ -113,10 +113,9 @@ class Scene:
 
         self.player_group.draw(screen)
         self.enemies_group.draw(screen)
-        self.player.draw_hp(screen)
 
         self.action_places_group.draw(screen)
         for redirect_zone in self.action_places_group.sprites():
             if redirect_zone.is_collided_with(self.player.shadow):
-                redirect_zone.draw_hint(screen)  # отрисовка подсказки по клавише
+                redirect_zone.draw_hint(screen, self.game.screen_size)  # отрисовка подсказки по клавише
                 break  # не могут быть сразу две подсказки

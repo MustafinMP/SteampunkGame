@@ -39,7 +39,8 @@ class Game:
 
     @staticmethod
     def terminate():
-        terminate()
+        pygame.quit()
+        sys.exit()
 
 
 def run() -> None:
@@ -49,7 +50,7 @@ def run() -> None:
         screen.fill(Colors.default)
 
         # контроль текущего размера экрана для правильного отображения объектов
-        new_screen_size: (int, int) = pygame.display.get_window_size()
+        new_screen_size: list[int, int] = pygame.display.get_window_size()
         if game.screen_size != new_screen_size:
             game.update_screen_size(new_screen_size)
 
@@ -62,11 +63,6 @@ def run() -> None:
         game.draw()
         pygame.display.flip()
         clock.tick(FPS)
-
-
-def terminate():
-    pygame.quit()
-    sys.exit()
 
 
 if __name__ == '__main__':

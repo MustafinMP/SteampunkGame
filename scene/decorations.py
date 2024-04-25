@@ -29,14 +29,9 @@ class ActionPlace(AbstractDecoration):
         self.hint_label = Sprite(self.hint_group)
         self.hint_label.image = load_data.load_image(hint_image)
         self.hint_label.rect = self.hint_label.image.get_rect()
-        self.update_hint_coord()
 
         self.action_func = lambda: ...
         self.action_args: list = []
-
-    def update_hint_coord(self):
-        self.hint_label.rect.x = self.rect.center[0] - 16
-        self.hint_label.rect.y = self.rect.center[1] + 32
 
     def set_action(self, func, *args):
         self.action_func = func
@@ -45,8 +40,9 @@ class ActionPlace(AbstractDecoration):
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
 
-    def draw_hint(self, screen):
-        self.update_hint_coord()
+    def draw_hint(self, screen, screen_size):
+        self.hint_label.rect.x = screen_size[0] // 2 - 96
+        self.hint_label.rect.y = screen_size[1] - 150
         self.hint_group.draw(screen)
 
     def call_action(self):
