@@ -1,0 +1,56 @@
+{
+  "start_position": [
+    0,
+    100
+  ],
+  "directory": "warehouse/",
+  "barriers": [
+    {
+      "name": "border_v.png",
+      "position": [
+        -16,
+        120
+      ]
+    },
+    {
+      "name": "metal.png",
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "metal.png",
+      "position": [
+        32,
+        0
+      ]
+    },
+    {
+      "name": "metal.png",
+      "position": [
+        64,
+        0
+      ]
+    }
+  ],
+  "decorations": [
+    {
+      "name": "metal.png",
+      "position": [
+        64,
+        0
+      ]
+    }
+  ],
+  "floor": [
+    {
+      "name": "garage_floor.png",
+      "position": [
+        0,
+        0
+      ]
+    }
+  ],
+  "redirect_zones": []
+}

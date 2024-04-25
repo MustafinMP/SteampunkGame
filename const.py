@@ -5,7 +5,7 @@ Key: TypeAlias = int
 
 FPS = 60
 ANIMATION_FPS = 10
-SPEED = 6
+SPEED = 8
 RATIO = 3  # коэффициент увеличения пикселя
 WIDTH = 1200
 HEIGHT = 700

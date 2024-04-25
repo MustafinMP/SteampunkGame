@@ -39,7 +39,6 @@ class RedirectZone(AbstractDecoration):
         self.hint_key.rect.y = self.rect.center[1] + 32
 
     def get_redirect_address(self):
-        redirect_address = locations.get_key(self.redirect_address)
         return self.redirect_address
 
     def is_collided_with(self, sprite):
