@@ -4,7 +4,6 @@ import load_data
 from const import WIDTH, HEIGHT, Colors, Key
 from player_module.moving_vector import PlayerMovingVector
 from player_module.player_image_controller import PlayerImageController
-from geometry_abstractions import Position
 
 
 class PlayerData:  # переместить в другое место, отвязать от сцены и спрайта игрока, привязать к классу игры
@@ -16,7 +15,7 @@ class PlayerData:  # переместить в другое место, отвя
 
 
 class PlayerSprite(Sprite):
-    def __init__(self, game_position: Position, scene, *group) -> None:
+    def __init__(self, scene, game_position: list[int, int] | tuple[int, int], *group) -> None:
         super().__init__(*group)
         self.scene = scene
         self.images = PlayerImageController()
@@ -25,7 +24,7 @@ class PlayerSprite(Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH // 2 - self.rect.width // 2
         self.rect.y = HEIGHT // 2 - self.rect.height // 2
-        self.game_position: Position = game_position
+        self.game_position: list = game_position
         self.mv = PlayerMovingVector()
 
         self.shadow = None
@@ -46,12 +45,12 @@ class PlayerSprite(Sprite):
         """Меняем позицию игрока, если это возможно"""
         self.shadow.rect.x += self.mv.x
         if not spritecollideany(self.shadow, barriers):
-            self.game_position.x += self.mv.x
+            self.game_position[0] += self.mv.x
         self.shadow.rect.x -= self.mv.x
 
         self.shadow.rect.y += self.mv.y
         if not spritecollideany(self.shadow, barriers):
-            self.game_position.y += self.mv.y
+            self.game_position[1] += self.mv.y
         self.shadow.rect.y -= self.mv.y
 
     def __update_image(self):
@@ -71,8 +70,8 @@ class PlayerSprite(Sprite):
         self.__move(barriers)
         self.__update_image()
 
-    def set_position(self, game_position: Position) -> None:
-        self.game_position: Position = game_position
+    def set_position(self, game_position: list[int, int] | tuple[int, int]) -> None:
+        self.game_position: list = game_position
 
     def draw_hp(self, screen) -> None:
         # не отображаем шкалу здоровья, если оно полное

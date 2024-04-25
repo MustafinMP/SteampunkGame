@@ -6,16 +6,16 @@ class Coord:
         self.x = x
         self.y = y
 
-    def __add__(self, other: Coord | Vector | Position):
+    def __add__(self, other: Coord | Vector):
         return Coord(self.x + other.x, self.y + other.y)
 
-    def __iadd__(self, other: Coord | Vector | Position):
+    def __iadd__(self, other: Coord | Vector):
         return self.__add__(other)
 
-    def __sub__(self, other: Coord | Vector | Position):
+    def __sub__(self, other: Coord | Vector):
         return Coord(self.x + other.x, self.y + other.y)
 
-    def __isub__(self, other: Coord | Vector | Position):
+    def __isub__(self, other: Coord | Vector):
         return self.__sub__(other)
 
 
@@ -24,7 +24,5 @@ class Vector(Coord):
         super().__init__(x, y)
 
 
-class Position(Coord):
-    """Поведение аналогично Coord, однако Position обозначает формальную позицию на игровом поле, в то время как Coord -
-    координаты на экране."""
-    ...
+def scale(iter_obj: list[int, int] | tuple[int, int], ratio: int):
+    return [elem * ratio for elem in iter_obj]

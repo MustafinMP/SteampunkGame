@@ -99,14 +99,15 @@
       ]
     }
   ],
-  "redirect_zones": [
+  "action_places": [
     {
       "name": "shadow.png",
       "position": [
         60,
         175
       ],
-      "redirect_to": "WAREHOUSE",
+      "action": "redirect",
+      "args": ["WAREHOUSE"],
       "hint": "hint_exit.png"
     }
   ]

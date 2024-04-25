@@ -1,45 +1,46 @@
 from pygame.sprite import Sprite, Group
-from geometry_abstractions import Position
-from const import RATIO
 import load_data
-import locations
 
 
 class AbstractDecoration(Sprite):
-    def __init__(self, position: Position, image: str, *group):
+    def __init__(self, position: list[int, int] | tuple[int, int], image: str, *group):
         super().__init__(*group)
         self.image = load_data.load_image(image)
         self.rect = self.image.get_rect()
-        self.game_position: Position = position
-        self.rect.x, self.rect.y = position.x, position.y
+        self.game_position: list = position
+        self.rect.x, self.rect.y = position
 
 
 class Floor(AbstractDecoration):
-    """Объект пола, не восприимчив к столкновениям"""
+    """Объект пола, всегда на заднем плане"""
 
 
 class Barrier(AbstractDecoration):
-    """Объект любых препятствий, восприимчив к столкновениям"""
+    """Объект препятствий, восприимчив к столкновениям"""
 
 
-class RedirectZone(AbstractDecoration):
-    """Особый объект пола, может сменять текущую локацию"""
+class ActionPlace(AbstractDecoration):
+    """Место, где возможно какое-либо действие"""
 
-    def __init__(self, position, image, redirect_address, redirect_image, *group):
+    def __init__(self, position: list[int, int] | tuple[int, int], image, hint_image, *group):
         super().__init__(position, image, *group)
-        self.redirect_address = redirect_address
+
         self.hint_group = Group()
-        self.hint_key = Sprite(self.hint_group)
-        self.hint_key.image = load_data.load_image(redirect_image)
-        self.hint_key.rect = self.hint_key.image.get_rect()
+        self.hint_label = Sprite(self.hint_group)
+        self.hint_label.image = load_data.load_image(hint_image)
+        self.hint_label.rect = self.hint_label.image.get_rect()
         self.update_hint_coord()
 
-    def update_hint_coord(self):
-        self.hint_key.rect.x = self.rect.center[0] - 16
-        self.hint_key.rect.y = self.rect.center[1] + 32
+        self.action_func = lambda: ...
+        self.action_args: list = []
 
-    def get_redirect_address(self):
-        return self.redirect_address
+    def update_hint_coord(self):
+        self.hint_label.rect.x = self.rect.center[0] - 16
+        self.hint_label.rect.y = self.rect.center[1] + 32
+
+    def set_action(self, func, *args):
+        self.action_func = func
+        self.action_args = args
 
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
@@ -47,3 +48,6 @@ class RedirectZone(AbstractDecoration):
     def draw_hint(self, screen):
         self.update_hint_coord()
         self.hint_group.draw(screen)
+
+    def call_action(self):
+        self.action_func(*self.action_args)
