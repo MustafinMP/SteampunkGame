@@ -60,18 +60,11 @@ class Scene:
             obj.set_action(action, *action_place['args'])
             self.camera.apply(obj)
 
-    def __update_action_places(self) -> None:
-        for action_place in self.action_places_group.sprites():
-            if action_place.is_collided_with(self.player.shadow):
-                action_place.call_action()
-                break
-
     def reload_scene(self, location_name: str) -> None:
         """Используется для перезагрузки сцены при смене локации"""
         self.hard_decorations_group = Group()
         self.background_decorations_group = Group()
         self.action_places_group = Group()
-
         self.enemies_group = Group()
 
         location_data = locations.get_location_data(location_name)
@@ -83,18 +76,11 @@ class Scene:
 
         self.pause = False
 
-    def draw(self, screen) -> None:
-        self.background_decorations_group.draw(screen)
-        self.hard_decorations_group.draw(screen)
-
-        self.player_group.draw(screen)
-        self.enemies_group.draw(screen)
-        self.player.draw_hp(screen)
-
-        self.action_places_group.draw(screen)
-        for redirect_zone in self.action_places_group.sprites():
-            if redirect_zone.is_collided_with(self.player.shadow):
-                redirect_zone.draw_hint(screen)  # отрисовка подсказки по клавише
+    def __update_action_places(self) -> None:
+        for action_place in self.action_places_group.sprites():
+            if action_place.is_collided_with(self.player.shadow):
+                action_place.call_action()
+                break
 
     def update_event(self, event) -> None:
         """Обработчик клавиш"""
@@ -116,9 +102,21 @@ class Scene:
 
     def update(self) -> None:
         self.camera.update_screen_size(self.game.screen_size)
-
         self.player.update(self.hard_decorations_group)
         self.camera.update(self.player)
-
         for decoration in self.all_decorations_group.sprites():
             self.camera.apply(decoration)
+
+    def draw(self, screen) -> None:
+        self.background_decorations_group.draw(screen)
+        self.hard_decorations_group.draw(screen)
+
+        self.player_group.draw(screen)
+        self.enemies_group.draw(screen)
+        self.player.draw_hp(screen)
+
+        self.action_places_group.draw(screen)
+        for redirect_zone in self.action_places_group.sprites():
+            if redirect_zone.is_collided_with(self.player.shadow):
+                redirect_zone.draw_hint(screen)  # отрисовка подсказки по клавише
+                break  # не могут быть сразу две подсказки
