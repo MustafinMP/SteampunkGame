@@ -15,7 +15,7 @@ class Game:
     """Главный класс всей игры."""
 
     def __init__(self):
-        self.widget = menu.KeyStartMenu(self)
+        self.widget = menu.StartMenu(self)
         self.screen_size = screen_size
 
     def draw(self):
