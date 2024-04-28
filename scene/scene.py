@@ -4,7 +4,7 @@ from geometry_abstractions import scale
 from scene.decorations import Barrier, Floor, ActionPlace
 from const import RATIO, Keys
 from camera import Camera
-from player_module import player
+from player_module import player as p_module
 import locations
 
 
@@ -23,13 +23,13 @@ class Scene:
         self.action_places_group = Group()
         self.all_decorations_group = Group()
 
-        self.player_group = Group()
         self.enemies_group = Group()
 
         location_data = locations.get_location_data(location)
 
-        player_coord = scale(location_data['start_position'], RATIO)
-        self.player = player.PlayerSprite(self, player_coord, self.player_group)
+        player_position = scale(location_data['start_position'], RATIO)
+        self.player = p_module.Player(self)
+        self.player.set_position(player_position)
 
         self.camera = Camera()
 
@@ -38,7 +38,7 @@ class Scene:
         self.pause = False
 
     def __init_decorations(self, data: dict) -> None:
-        self.camera.update(self.player)
+        self.camera.update(self.player.player_sprite)
         directory = data['directory']
         for barrier in data['barriers']:
             obj = Barrier(scale(barrier['position'], RATIO), directory + barrier['name'],
@@ -78,7 +78,7 @@ class Scene:
 
     def __update_action_places(self) -> None:
         for action_place in self.action_places_group.sprites():
-            if action_place.is_collided_with(self.player.shadow):
+            if action_place.is_collided_with(self.player.shadow_sprite):
                 action_place.call_action()
                 break
 
@@ -103,7 +103,7 @@ class Scene:
     def update(self) -> None:
         self.camera.update_screen_size(self.game.screen_size)
         self.player.update(self.hard_decorations_group)
-        self.camera.update(self.player)
+        self.camera.update(self.player.player_sprite)
         for decoration in self.all_decorations_group.sprites():
             self.camera.apply(decoration)
 
@@ -111,11 +111,11 @@ class Scene:
         self.background_decorations_group.draw(screen)
         self.hard_decorations_group.draw(screen)
 
-        self.player_group.draw(screen)
+        self.player.draw(screen)
         self.enemies_group.draw(screen)
 
         self.action_places_group.draw(screen)
         for redirect_zone in self.action_places_group.sprites():
-            if redirect_zone.is_collided_with(self.player.shadow):
+            if redirect_zone.is_collided_with(self.player.shadow_sprite):
                 redirect_zone.draw_hint(screen, self.game.screen_size)  # отрисовка подсказки по клавише
                 break  # не могут быть сразу две подсказки
