@@ -1,10 +1,12 @@
 from pygame.sprite import Sprite, Group
+from custom_sprite import CustomSprite
 import load_data
 
 
-class AbstractDecoration(Sprite):
-    def __init__(self, position: list[int, int] | tuple[int, int], image: str, *group):
+class AbstractDecoration(CustomSprite):
+    def __init__(self, scene, position: list[int, int] | tuple[int, int], image: str, *group):
         super().__init__(*group)
+        self.scene = scene
         self.image = load_data.load_image(image)
         self.rect = self.image.get_rect()
         self.game_position: list = position
@@ -22,15 +24,14 @@ class Barrier(AbstractDecoration):
 class ActionPlace(AbstractDecoration):
     """Место, где возможно какое-либо действие"""
 
-    def __init__(self, position: list[int, int] | tuple[int, int], image, hint_image, *group):
-        super().__init__(position, image, *group)
+    def __init__(self, scene, position: list[int, int] | tuple[int, int], image, hint_image):
+        super().__init__(scene, position, image)
 
-        self.hint_group = Group()
-        self.hint_label = Sprite(self.hint_group)
+        self.hint_label = CustomSprite()
         self.hint_label.image = load_data.load_image(hint_image)
         self.hint_label.rect = self.hint_label.image.get_rect()
 
-        self.action_func = lambda: ...
+        self.action_func = lambda *args: ...
         self.action_args: list = []
 
     def set_action(self, func, *args):
@@ -40,10 +41,13 @@ class ActionPlace(AbstractDecoration):
     def is_collided_with(self, sprite):
         return self.rect.colliderect(sprite.rect)
 
-    def draw_hint(self, screen, screen_size):
-        self.hint_label.rect.x = screen_size[0] // 2 - 96
-        self.hint_label.rect.y = screen_size[1] - 150
-        self.hint_group.draw(screen)
-
     def call_action(self):
         self.action_func(*self.action_args)
+
+    def draw(self, screen, draw_hint=False):
+        super().draw(screen)
+        if draw_hint:
+            screen_size = self.scene.game.screen_size
+            self.hint_label.rect.x = screen_size[0] // 2 - 96
+            self.hint_label.rect.y = screen_size[1] - 150
+            self.hint_label.draw(screen)

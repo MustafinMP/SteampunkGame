@@ -7,8 +7,8 @@ from player_module.player_image_controller import PlayerImageController
 
 
 class PlayerShadowSprite(CustomSprite):
-    def __init__(self, *group) -> None:
-        super().__init__(*group)
+    def __init__(self) -> None:
+        super().__init__()
         self.image = load_data.load_image('shadow.png')
         self.rect = self.image.get_rect()
 
@@ -29,7 +29,6 @@ class PlayerSprite(CustomSprite):
         self.scene = scene
         self.images = PlayerImageController()
         self.image = self.images.main_image
-
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH // 2 - self.rect.width // 2
         self.rect.y = HEIGHT // 2 - self.rect.height // 2
@@ -71,6 +70,7 @@ class Player:
         self.player_sprite.set_position(game_position)
 
     def update(self, barriers: Group) -> None:
+        self.shadow_sprite.update_coord(self.player_sprite.rect)
         self.moving_vector.update()
         self.move(barriers)
         self.player_sprite.update_image(self.moving_vector)

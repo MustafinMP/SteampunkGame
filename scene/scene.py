@@ -17,9 +17,8 @@ class Scene:
         self.game = game
 
         self.hard_decorations_group = Group()
-        self.background_decorations_group = Group()
-        self.action_places_group = Group()
-        self.all_decorations_group = Group()
+        self.background_decorations = []
+        self.action_places = []
 
         location_data = locations.get_location_data(location)
 
@@ -37,30 +36,28 @@ class Scene:
         self.camera.update(self.player.player_sprite)
         directory = data['directory']
         for barrier in data['barriers']:
-            obj = Barrier(scale(barrier['position'], RATIO), directory + barrier['name'],
-                          self.hard_decorations_group,
-                          self.all_decorations_group)
+            obj = Barrier(self, scale(barrier['position'], RATIO), directory + barrier['name'],
+                          self.hard_decorations_group)
             self.camera.apply(obj)
 
         for floor in data['floor']:
-            obj = Floor(scale(floor['position'], RATIO), directory + floor['name'],
-                        self.background_decorations_group,
-                        self.all_decorations_group)
+            obj = Floor(self, scale(floor['position'], RATIO), directory + floor['name'])
             self.camera.apply(obj)
+            self.background_decorations.append(obj)
 
         for action_place in data['action_places']:
-            obj = ActionPlace(scale(action_place['position'], RATIO),
-                              directory + action_place['name'], action_place['hint'], self.action_places_group,
-                              self.all_decorations_group)
+            obj = ActionPlace(self, scale(action_place['position'], RATIO),
+                              directory + action_place['name'], action_place['hint'])
             action = self.reload_scene
             obj.set_action(action, *action_place['args'])
+            self.action_places.append(obj)
             self.camera.apply(obj)
 
     def reload_scene(self, location_name: str) -> None:
         """Используется для перезагрузки сцены при смене локации"""
         self.hard_decorations_group = Group()
-        self.background_decorations_group = Group()
-        self.action_places_group = Group()
+        self.background_decorations = []
+        self.action_places = []
 
         location_data = locations.get_location_data(location_name)
 
@@ -72,7 +69,7 @@ class Scene:
         self.pause = False
 
     def __update_action_places(self) -> None:
-        for action_place in self.action_places_group.sprites():
+        for action_place in self.action_places:
             if action_place.is_collided_with(self.player.shadow_sprite):
                 action_place.call_action()
                 break
@@ -99,17 +96,20 @@ class Scene:
         self.camera.update_screen_size(self.game.screen_size)
         self.player.update(self.hard_decorations_group)
         self.camera.update(self.player.player_sprite)
-        for decoration in self.all_decorations_group.sprites():
+        for decoration in self.background_decorations:
             self.camera.apply(decoration)
+        for decoration in self.hard_decorations_group.sprites():
+            self.camera.apply(decoration)
+        for action_place in self.action_places:
+            self.camera.apply(action_place)
+        self.camera.apply(self.player.player_sprite)
 
     def draw(self, screen) -> None:
-        self.background_decorations_group.draw(screen)
+        for decoration in self.background_decorations:
+            decoration.draw(screen)
         self.hard_decorations_group.draw(screen)
 
         self.player.draw(screen)
 
-        self.action_places_group.draw(screen)
-        for redirect_zone in self.action_places_group.sprites():
-            if redirect_zone.is_collided_with(self.player.shadow_sprite):
-                redirect_zone.draw_hint(screen, self.game.screen_size)  # отрисовка подсказки по клавише
-                break  # не могут быть сразу две подсказки
+        for redirect_zone in self.action_places:
+            redirect_zone.draw(screen, draw_hint=redirect_zone.is_collided_with(self.player.shadow_sprite))
