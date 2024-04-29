@@ -1,4 +1,3 @@
-from pygame.sprite import Sprite, Group, spritecollideany
 from custom_sprite import CustomSprite
 import load_data
 from const import WIDTH, HEIGHT, Key
@@ -69,22 +68,22 @@ class Player:
     def set_position(self, game_position: list[int, int] | tuple[int, int]) -> None:
         self.player_sprite.set_position(game_position)
 
-    def update(self, barriers: Group) -> None:
+    def update(self, barriers: list[CustomSprite]) -> None:
         self.shadow_sprite.update_coord(self.player_sprite.rect)
         self.moving_vector.update()
         self.move(barriers)
         self.player_sprite.update_image(self.moving_vector)
 
-    def move(self, barriers: Group) -> None:
+    def move(self, barriers: list[CustomSprite]) -> None:
         dx = self.moving_vector.x
         self.shadow_sprite.move_x(dx)
-        if not spritecollideany(self.shadow_sprite, barriers):
+        if not any([barrier.is_collided_with(self.shadow_sprite) for barrier in barriers]):
             self.player_sprite.move_x(dx)
         self.shadow_sprite.move_x(-dx)
 
         dy = self.moving_vector.y
         self.shadow_sprite.move_y(dy)
-        if not spritecollideany(self.shadow_sprite, barriers):
+        if not any([barrier.is_collided_with(self.shadow_sprite) for barrier in barriers]):
             self.player_sprite.move_y(dy)
         self.shadow_sprite.move_y(-dy)
 

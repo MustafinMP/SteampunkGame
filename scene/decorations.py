@@ -1,4 +1,3 @@
-from pygame.sprite import Sprite, Group
 from custom_sprite import CustomSprite
 import load_data
 

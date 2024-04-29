@@ -1,5 +1,4 @@
 import pygame
-from pygame.sprite import Group
 from geometry_abstractions import scale
 from scene.decorations import Barrier, Floor, ActionPlace
 from const import RATIO, Keys
@@ -16,7 +15,7 @@ class Scene:
     def __init__(self, game, location) -> None:
         self.game = game
 
-        self.hard_decorations_group = Group()
+        self.hard_decorations = []
         self.background_decorations = []
         self.action_places = []
 
@@ -36,9 +35,9 @@ class Scene:
         self.camera.update(self.player.player_sprite)
         directory = data['directory']
         for barrier in data['barriers']:
-            obj = Barrier(self, scale(barrier['position'], RATIO), directory + barrier['name'],
-                          self.hard_decorations_group)
+            obj = Barrier(self, scale(barrier['position'], RATIO), directory + barrier['name'])
             self.camera.apply(obj)
+            self.hard_decorations.append(obj)
 
         for floor in data['floor']:
             obj = Floor(self, scale(floor['position'], RATIO), directory + floor['name'])
@@ -55,7 +54,7 @@ class Scene:
 
     def reload_scene(self, location_name: str) -> None:
         """Используется для перезагрузки сцены при смене локации"""
-        self.hard_decorations_group = Group()
+        self.hard_decorations = []
         self.background_decorations = []
         self.action_places = []
 
@@ -94,11 +93,11 @@ class Scene:
 
     def update(self) -> None:
         self.camera.update_screen_size(self.game.screen_size)
-        self.player.update(self.hard_decorations_group)
+        self.player.update(self.hard_decorations)
         self.camera.update(self.player.player_sprite)
         for decoration in self.background_decorations:
             self.camera.apply(decoration)
-        for decoration in self.hard_decorations_group.sprites():
+        for decoration in self.hard_decorations:
             self.camera.apply(decoration)
         for action_place in self.action_places:
             self.camera.apply(action_place)
@@ -107,7 +106,8 @@ class Scene:
     def draw(self, screen) -> None:
         for decoration in self.background_decorations:
             decoration.draw(screen)
-        self.hard_decorations_group.draw(screen)
+        for decoration in self.hard_decorations:
+            decoration.draw(screen)
 
         self.player.draw(screen)
 
