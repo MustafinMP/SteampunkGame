@@ -10,7 +10,7 @@ from const import Colors
 class KeyMenu(widget.Widget):
     """С этим меню можно взаимодействовать только клавиатурой"""
 
-    def __init__(self, game: main.Game):
+    def __init__(self, game: main.Game) -> None:
         super().__init__(game)
         del self.action_buttons
         self.sprite_group = Group()
@@ -18,7 +18,7 @@ class KeyMenu(widget.Widget):
         self.actions_count: int = 0
         self.current_action_index = 0
 
-    def update_event(self, event):
+    def update_event(self, event) -> None:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 self.actions[self.current_action_index].set_status(False)
@@ -39,7 +39,7 @@ class KeyMenu(widget.Widget):
 
 
 class StartMenu(widget.Widget):
-    def __init__(self, game: main.Game):
+    def __init__(self, game: main.Game) -> None:
         super().__init__(game)
         self.start_button = ActionButton(self,
                                          'buttons/play_button.png',
@@ -55,14 +55,14 @@ class StartMenu(widget.Widget):
         self.exit_button.set_coord((400, 400))
         self.exit_button.set_action(self.terminate_game)
 
-    def update(self):
+    def update(self) -> None:
         sc_x, sc_y = self.game.screen_size
         self.start_button.set_coord((sc_x // 2 - 200, (sc_y - 400) // 3))
         self.exit_button.set_coord((sc_x // 2 - 200, (sc_y - 400) // 3 * 2 + 200))
 
-    def redirect_to_garage(self):
+    def redirect_to_garage(self) -> None:
         """Перемещение в стартовую сцену"""
         self.game.redirect_to(scene.Scene(self.game, GARAGE))
 
-    def terminate_game(self):
+    def terminate_game(self) -> None:
         self.game.terminate()

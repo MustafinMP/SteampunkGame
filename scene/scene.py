@@ -10,20 +10,16 @@ import locations
 
 class Scene:
     '''
-    Игровое поле.
-
-    Отвечает непосредственно за игровой процесс (декорации, игроки, кнопки).
+    Игровое поле. Отвечает непосредственно за игровой процесс (декорации, игроки, кнопки).
     '''
 
-    def __init__(self, game, location):
+    def __init__(self, game, location) -> None:
         self.game = game
 
         self.hard_decorations_group = Group()
         self.background_decorations_group = Group()
         self.action_places_group = Group()
         self.all_decorations_group = Group()
-
-        self.enemies_group = Group()
 
         location_data = locations.get_location_data(location)
 
@@ -65,7 +61,6 @@ class Scene:
         self.hard_decorations_group = Group()
         self.background_decorations_group = Group()
         self.action_places_group = Group()
-        self.enemies_group = Group()
 
         location_data = locations.get_location_data(location_name)
 
@@ -112,7 +107,6 @@ class Scene:
         self.hard_decorations_group.draw(screen)
 
         self.player.draw(screen)
-        self.enemies_group.draw(screen)
 
         self.action_places_group.draw(screen)
         for redirect_zone in self.action_places_group.sprites():

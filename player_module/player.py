@@ -1,12 +1,13 @@
 from pygame.sprite import Sprite, Group, spritecollideany
+from custom_sprite import CustomSprite
 import load_data
 from const import WIDTH, HEIGHT, Key
 from player_module.moving_vector import PlayerMovingVector
 from player_module.player_image_controller import PlayerImageController
 
 
-class PlayerShadowSprite(Sprite):
-    def __init__(self, *group):
+class PlayerShadowSprite(CustomSprite):
+    def __init__(self, *group) -> None:
         super().__init__(*group)
         self.image = load_data.load_image('shadow.png')
         self.rect = self.image.get_rect()
@@ -22,9 +23,9 @@ class PlayerShadowSprite(Sprite):
         self.rect.y += dy
 
 
-class PlayerSprite(Sprite):
-    def __init__(self, scene, *group) -> None:
-        super().__init__(*group)
+class PlayerSprite(CustomSprite):
+    def __init__(self, scene) -> None:
+        super().__init__()
         self.scene = scene
         self.images = PlayerImageController()
         self.image = self.images.main_image
@@ -45,21 +46,23 @@ class PlayerSprite(Sprite):
     def set_position(self, game_position: list[int, int] | tuple[int, int]) -> None:
         self.game_position: list = game_position
 
-    def update_image(self, mv: PlayerMovingVector):
+    def update_image(self, mv: PlayerMovingVector) -> None:
         if mv.x == 0 and mv.y == 0:
             image = self.images.update_image(self.images.STAY)
         else:
             image = self.images.update_image(self.images.RUNNING, mv.x, mv.y)
         self.image = image
 
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+
 
 class Player:
     """Фасад. Инкапсулирует в себе спрайт игрока, его тень (объект контроля движения), управление игроком."""
-    def __init__(self, scene):
+    def __init__(self, scene) -> None:
         self.scene = scene
-        self.sprite_group = Group()
-        self.player_sprite = PlayerSprite(scene, self.sprite_group)
-        self.shadow_sprite = PlayerShadowSprite(self.sprite_group)
+        self.player_sprite = PlayerSprite(scene)
+        self.shadow_sprite = PlayerShadowSprite()
         self.shadow_sprite.update_coord(self.player_sprite.rect)
 
         self.moving_vector = PlayerMovingVector()
@@ -91,5 +94,6 @@ class Player:
     def keyup(self, key: Key) -> None:
         self.moving_vector.keyup(key)
 
-    def draw(self, screen):
-        self.sprite_group.draw(screen)
+    def draw(self, screen) -> None:
+        self.player_sprite.draw(screen)
+        self.shadow_sprite.draw(screen)

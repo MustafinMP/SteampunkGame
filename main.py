@@ -14,24 +14,24 @@ clock = pygame.time.Clock()
 class Game:
     """Главный класс всей игры."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.widget = menu.StartMenu(self)
         self.screen_size = screen_size
 
-    def draw(self):
+    def draw(self) -> None:
         self.widget.draw(screen)
 
-    def event_update(self, event):
+    def event_update(self, event) -> None:
         """Обработка действий игрока"""
         self.widget.update_event(event)
 
-    def update(self):
+    def update(self) -> None:
         self.widget.update()
 
-    def update_screen_size(self, new_screen_size: (int, int)):
+    def update_screen_size(self, new_screen_size: list[int, int] | tuple[int, int]) -> None:
         self.screen_size = new_screen_size
 
-    def redirect_to(self, widget_):
+    def redirect_to(self, widget_) -> None:
         self.widget = widget_
 
     def background_color(self) -> Color:
