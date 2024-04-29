@@ -32,7 +32,7 @@ class Scene:
         self.pause = False
 
     def __init_decorations(self, data: dict) -> None:
-        self.camera.update(self.player.player_sprite)
+        self.camera.update(self.player.main_sprite)
         directory = data['directory']
         for barrier in data['barriers']:
             obj = Barrier(self, scale(barrier['position'], RATIO), directory + barrier['name'])
@@ -94,22 +94,23 @@ class Scene:
     def update(self) -> None:
         self.camera.update_screen_size(self.game.screen_size)
         self.player.update(self.hard_decorations)
-        self.camera.update(self.player.player_sprite)
+        self.camera.update(self.player.main_sprite)
         for decoration in self.background_decorations:
             self.camera.apply(decoration)
         for decoration in self.hard_decorations:
             self.camera.apply(decoration)
         for action_place in self.action_places:
             self.camera.apply(action_place)
-        self.camera.apply(self.player.player_sprite)
+        self.camera.apply(self.player.main_sprite)
 
     def draw(self, screen) -> None:
         for decoration in self.background_decorations:
             decoration.draw(screen)
-        for decoration in self.hard_decorations:
-            decoration.draw(screen)
 
-        self.player.draw(screen)
+        all_sprites = self.hard_decorations + [self.player]
+        all_sprites.sort(key=lambda obj: obj.sort_key())
+        for obj in all_sprites:
+            obj.draw(screen)
 
         for redirect_zone in self.action_places:
             redirect_zone.draw(screen, draw_hint=redirect_zone.is_collided_with(self.player.shadow_sprite))

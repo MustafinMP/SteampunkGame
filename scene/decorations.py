@@ -3,8 +3,8 @@ import load_data
 
 
 class AbstractDecoration(CustomSprite):
-    def __init__(self, scene, position: list[int, int] | tuple[int, int], image: str, *group):
-        super().__init__(*group)
+    def __init__(self, scene, position: list[int, int] | tuple[int, int], image: str):
+        super().__init__()
         self.scene = scene
         self.image = load_data.load_image(image)
         self.rect = self.image.get_rect()
@@ -18,6 +18,11 @@ class Floor(AbstractDecoration):
 
 class Barrier(AbstractDecoration):
     """Объект препятствий, восприимчив к столкновениям"""
+    def __init__(self, scene, position: list[int, int] | tuple[int, int], image: str, shadow_image='shadow.png'):
+        super().__init__(scene, position, image)
+
+    def collide_shadow(self, other_shadow_sprite):
+        ...
 
 
 class ActionPlace(AbstractDecoration):
