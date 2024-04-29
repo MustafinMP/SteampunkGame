@@ -1,6 +1,7 @@
 import pygame
 from geometry_abstractions import scale
-from scene.decorations import Barrier, Floor, ActionPlace
+from scene.decorations import Floor, ActionPlace
+from custom_sprite import SceneObject
 from const import RATIO, Keys
 from camera import Camera
 from player_module import player as p_module
@@ -35,8 +36,8 @@ class Scene:
         self.camera.update(self.player.main_sprite)
         directory = data['directory']
         for barrier in data['barriers']:
-            obj = Barrier(self, scale(barrier['position'], RATIO), directory + barrier['name'])
-            self.camera.apply(obj)
+            obj = SceneObject(self, scale(barrier['position'], RATIO), directory + barrier['name'])
+            self.camera.apply(obj.main_sprite)
             self.hard_decorations.append(obj)
 
         for floor in data['floor']:
@@ -98,7 +99,8 @@ class Scene:
         for decoration in self.background_decorations:
             self.camera.apply(decoration)
         for decoration in self.hard_decorations:
-            self.camera.apply(decoration)
+            self.camera.apply(decoration.main_sprite)
+            decoration.update()
         for action_place in self.action_places:
             self.camera.apply(action_place)
         self.camera.apply(self.player.main_sprite)

@@ -1,4 +1,4 @@
-from custom_sprite import CustomSprite
+from custom_sprite import CustomSprite, SceneObject
 import load_data
 
 
@@ -14,15 +14,6 @@ class AbstractDecoration(CustomSprite):
 
 class Floor(AbstractDecoration):
     """Объект пола, всегда на заднем плане"""
-
-
-class Barrier(AbstractDecoration):
-    """Объект препятствий, восприимчив к столкновениям"""
-    def __init__(self, scene, position: list[int, int] | tuple[int, int], image: str, shadow_image='shadow.png'):
-        super().__init__(scene, position, image)
-
-    def collide_shadow(self, other_shadow_sprite):
-        ...
 
 
 class ActionPlace(AbstractDecoration):

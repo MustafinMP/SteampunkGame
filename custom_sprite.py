@@ -49,16 +49,16 @@ class SceneObjectSprite(CustomSprite):
 
 class SceneObject:
     """Фасад. Инкапсулирует в себе спрайт игровго предмета или персонажа."""
-    def __init__(self, scene, position, image) -> None:
+    def __init__(self, scene, position, image, shadow_image='shadow.png') -> None:
         self.scene = scene
         self.main_sprite = SceneObjectSprite(scene, position, image)
-        self.shadow_sprite = ShadowSprite()
+        self.shadow_sprite = ShadowSprite(shadow_image)
         self.shadow_sprite.update_coord(self.main_sprite.rect)
 
     def set_position(self, game_position: list[int, int] | tuple[int, int]) -> None:
         self.main_sprite.set_position(game_position)
 
-    def update(self, others) -> None:
+    def update(self, others=()) -> None:
         self.shadow_sprite.update_coord(self.main_sprite.rect)
 
     def collide_shadow(self, other_object: SceneObject) -> bool:

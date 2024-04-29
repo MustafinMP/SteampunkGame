@@ -55,16 +55,16 @@ class Player(SceneObject):
         self.move(barriers)
         self.main_sprite.update_image(self.moving_vector)
 
-    def move(self, barriers: list[CustomSprite]) -> None:
+    def move(self, other_objects: list[SceneObject]) -> None:
         dx = self.moving_vector.x
         self.shadow_sprite.move_x(dx)
-        if not any([barrier.is_collided_with(self.shadow_sprite) for barrier in barriers]):
+        if not any([obj.collide_shadow(self) for obj in other_objects]):
             self.main_sprite.move_x(dx)
         self.shadow_sprite.move_x(-dx)
 
         dy = self.moving_vector.y
         self.shadow_sprite.move_y(dy)
-        if not any([barrier.is_collided_with(self.shadow_sprite) for barrier in barriers]):
+        if not any([obj.collide_shadow(self) for obj in other_objects]):
             self.main_sprite.move_y(dy)
         self.shadow_sprite.move_y(-dy)
 
