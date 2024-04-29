@@ -6,77 +6,88 @@
   "directory": "garage/",
   "barriers": [
     {
-      "name": "border_v.png",
+      "image": "border_v.png",
+      "shadow_image": "border_v.png",
       "position": [
         -16,
         120
       ]
     },
     {
-      "name": "border_v.png",
+      "image": "border_v.png",
+      "shadow_image": "border_v.png",
       "position": [
         234,
         120
       ]
     },
     {
-      "name": "border_v.png",
+      "image": "border_v.png",
+      "shadow_image": "border_v.png",
       "position": [
         234,
         56
       ]
     },
     {
-      "name": "border_g.png",
+      "image": "border_g.png",
+      "shadow_image": "border_g.png",
       "position": [
         0,
         185
       ]
     },
     {
-      "name": "border_g.png",
+      "image": "border_g.png",
+      "shadow_image": "border_g.png",
       "position": [
         64,
         185
       ]
     },
     {
-      "name": "border_g.png",
+      "image": "border_g.png",
+      "shadow_image": "border_g.png",
       "position": [
         128,
         185
       ]
     },
     {
-      "name": "border_g.png",
+      "image": "border_g.png",
+      "shadow_image": "border_g.png",
       "position": [
         192,
         185
       ]
     },
     {
-      "name": "garage_wall_1.png",
+      "image": "garage_wall_1.png",
+      "shadow_image": "shadow45-45.png",
       "position": [
         0,
         0
       ]
     },
     {
-      "name": "garage_wall_2.png",
+      "image": "garage_wall_2.png",
+      "shadow_image": "shadow45-45.png",
       "position": [
         45,
         1
       ]
     },
     {
-      "name": "garage_wall_3.png",
+      "image": "garage_wall_3.png",
+      "shadow_image": "shadow146-45.png",
       "position": [
         88,
         1
       ]
     },
     {
-      "name": "transformer.png",
+      "image": "transformer.png",
+      "shadow_image": "transformer.png",
       "position": [
         151,
         85
@@ -85,14 +96,14 @@
   ],
   "floor": [
     {
-      "name": "garage_floor.png",
+      "image": "garage_floor.png",
       "position": [
         0,
         75
       ]
     },
     {
-      "name": "transformer_shadow_1.png",
+      "image": "transformer_shadow_1.png",
       "position": [
         173,
         85
@@ -101,14 +112,14 @@
   ],
   "action_places": [
     {
-      "name": "shadow.png",
+      "image": "shadow.png",
       "position": [
         60,
         175
       ],
       "action": "redirect",
       "args": ["WAREHOUSE"],
-      "hint": "hint_exit.png"
+      "hint_image": "hint_exit.png"
     }
   ]
 }

@@ -6,28 +6,28 @@
   "directory": "warehouse/",
   "barriers": [
     {
-      "name": "border_v.png",
+      "image": "border_v.png",
       "position": [
         -16,
         120
       ]
     },
     {
-      "name": "metal.png",
+      "image": "metal.png",
       "position": [
         0,
         0
       ]
     },
     {
-      "name": "metal.png",
+      "image": "metal.png",
       "position": [
         32,
         0
       ]
     },
     {
-      "name": "metal.png",
+      "image": "metal.png",
       "position": [
         64,
         0
@@ -36,7 +36,7 @@
   ],
   "decorations": [
     {
-      "name": "metal.png",
+      "image": "metal.png",
       "position": [
         64,
         0
@@ -45,7 +45,7 @@
   ],
   "floor": [
     {
-      "name": "garage_floor.png",
+      "image": "garage_floor.png",
       "position": [
         0,
         0

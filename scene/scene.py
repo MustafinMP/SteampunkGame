@@ -36,18 +36,19 @@ class Scene:
         self.camera.update(self.player.main_sprite)
         directory = data['directory']
         for barrier in data['barriers']:
-            obj = SceneObject(self, scale(barrier['position'], RATIO), directory + barrier['name'])
+            obj = SceneObject(self, scale(barrier['position'], RATIO), directory + barrier['image'],
+                              directory + barrier['shadow_image'])
             self.camera.apply(obj.main_sprite)
             self.hard_decorations.append(obj)
 
         for floor in data['floor']:
-            obj = Floor(self, scale(floor['position'], RATIO), directory + floor['name'])
+            obj = Floor(self, scale(floor['position'], RATIO), directory + floor['image'])
             self.camera.apply(obj)
             self.background_decorations.append(obj)
 
         for action_place in data['action_places']:
             obj = ActionPlace(self, scale(action_place['position'], RATIO),
-                              directory + action_place['name'], action_place['hint'])
+                              directory + action_place['image'], action_place['hint_image'])
             action = self.reload_scene
             obj.set_action(action, *action_place['args'])
             self.action_places.append(obj)
