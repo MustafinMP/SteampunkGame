@@ -12,10 +12,6 @@ class AbstractDecoration(CustomSprite):
         self.rect.x, self.rect.y = position
 
 
-class Floor(AbstractDecoration):
-    """Объект пола, всегда на заднем плане"""
-
-
 class ActionPlace(AbstractDecoration):
     """Место, где возможно какое-либо действие"""
 
