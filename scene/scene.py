@@ -1,8 +1,9 @@
 import pygame
 from geometry_abstractions import scale
-from scene.decorations import Floor, ActionPlace
+from scene.decorations import ActionPlace
 from scene.scene_object import SceneObject
 from scene.background_object import BackgroundObject
+from scene.action_object import ActionObject
 from const import RATIO, Keys
 from camera import Camera
 from player_module import player as p_module
@@ -48,12 +49,12 @@ class Scene:
             self.background_decorations.append(obj)
 
         for action_place in data['action_places']:
-            obj = ActionPlace(self, scale(action_place['position'], RATIO),
-                              directory + action_place['image'], action_place['hint_image'])
+            obj = ActionObject(self, scale(action_place['position'], RATIO),
+                               directory + action_place['image'], action_place['hint_image'])
             action = self.reload_scene
             obj.set_action(action, *action_place['args'])
             self.action_places.append(obj)
-            self.camera.apply(obj)
+            self.camera.apply(obj.main_sprite)
 
     def reload_scene(self, location_name: str) -> None:
         """Используется для перезагрузки сцены при смене локации"""
@@ -72,7 +73,7 @@ class Scene:
 
     def __update_action_places(self) -> None:
         for action_place in self.action_places:
-            if action_place.is_collided_with(self.player.shadow_sprite):
+            if action_place.collide_shadow(self.player):
                 action_place.call_action()
                 break
 
@@ -106,8 +107,9 @@ class Scene:
             self.camera.apply(decoration.main_sprite)
             decoration.update()
         for action_place in self.action_places:
-            self.camera.apply(action_place)
-            
+            self.camera.apply(action_place.main_sprite)
+            action_place.update()
+
         self.camera.apply(self.player.main_sprite)
 
     def draw(self, screen) -> None:
@@ -120,4 +122,4 @@ class Scene:
             obj.draw(screen)
 
         for redirect_zone in self.action_places:
-            redirect_zone.draw(screen, draw_hint=redirect_zone.is_collided_with(self.player.shadow_sprite))
+            redirect_zone.draw(screen, draw_hint=redirect_zone.collide_shadow(self.player))

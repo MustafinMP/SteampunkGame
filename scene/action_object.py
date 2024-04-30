@@ -1,23 +1,11 @@
+from scene.scene_object import SceneObject
 from custom_sprite import CustomSprite
 import load_data
 
 
-class AbstractDecoration(CustomSprite):
-    def __init__(self, scene, position: list[int, int] | tuple[int, int], image: str):
-        super().__init__()
-        self.scene = scene
-        self.image = load_data.load_image(image)
-        self.rect = self.image.get_rect()
-        self.game_position: list = position
-        self.rect.x, self.rect.y = position
-
-
-class ActionPlace(AbstractDecoration):
-    """Место, где возможно какое-либо действие"""
-
+class ActionObject(SceneObject):
     def __init__(self, scene, position: list[int, int] | tuple[int, int], image, hint_image):
-        super().__init__(scene, position, image)
-
+        super().__init__(scene, position, image, image)
         self.hint_label = CustomSprite()
         self.hint_label.image = load_data.load_image(hint_image)
         self.hint_label.rect = self.hint_label.image.get_rect()
@@ -36,6 +24,6 @@ class ActionPlace(AbstractDecoration):
         super().draw(screen)
         if draw_hint:
             screen_size = self.scene.game.screen_size
-            self.hint_label.rect.x = screen_size[0] // 2 - 96
+            self.hint_label.rect.x = screen_size[0] // 2 - self.hint_label.rect.width // 2
             self.hint_label.rect.y = screen_size[1] - 150
             self.hint_label.draw(screen)
