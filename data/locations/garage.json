@@ -4,7 +4,7 @@
     148
   ],
   "directory": "garage/",
-  "barriers": [
+  "scene_objects": [
     {
       "image": "border_v.png",
       "shadow_image": "border_v.png",
@@ -94,7 +94,7 @@
       ]
     }
   ],
-  "floor": [
+  "backgrounds": [
     {
       "image": "garage_floor.png",
       "position": [

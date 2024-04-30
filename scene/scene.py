@@ -36,24 +36,24 @@ class Scene:
     def __init_decorations(self, data: dict) -> None:
         self.camera.update(self.player)
         directory = data['directory']
-        for barrier in data['barriers']:
-            obj = SceneObject(self, scale(barrier['position'], RATIO), directory + barrier['image'],
-                              directory + barrier['shadow_image'])
-            self.camera.apply(obj)
-            self.hard_decorations.append(obj)
+        for sco in data['scene_objects']:
+            sco_obj = SceneObject(self, scale(sco['position'], RATIO), directory + sco['image'],
+                              directory + sco['shadow_image'])
+            self.camera.apply(sco_obj)
+            self.hard_decorations.append(sco_obj)
 
-        for floor in data['floor']:
-            obj = BackgroundObject(self, scale(floor['position'], RATIO), directory + floor['image'])
-            self.camera.apply(obj)
-            self.background_decorations.append(obj)
+        for bg in data['backgrounds']:
+            bg_obj = BackgroundObject(self, scale(bg['position'], RATIO), directory + bg['image'])
+            self.camera.apply(bg_obj)
+            self.background_decorations.append(bg_obj)
 
-        for action_place in data['action_places']:
-            obj = ActionObject(self, scale(action_place['position'], RATIO),
-                               directory + action_place['image'], action_place['hint_image'])
+        for actn in data['action_places']:
+            actn_obj = ActionObject(self, scale(actn['position'], RATIO),
+                               directory + actn['image'], actn['hint_image'])
             action = self.reload_scene
-            obj.set_action(action, *action_place['args'])
-            self.action_places.append(obj)
-            self.camera.apply(obj)
+            actn_obj.set_action(action, *actn['args'])
+            self.action_places.append(actn_obj)
+            self.camera.apply(actn_obj)
 
     def reload_scene(self, location_name: str) -> None:
         """Используется для перезагрузки сцены при смене локации"""
