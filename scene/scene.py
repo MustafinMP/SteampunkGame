@@ -1,6 +1,5 @@
 import pygame
 from geometry_abstractions import scale
-from scene.decorations import ActionPlace
 from scene.scene_object import SceneObject
 from scene.background_object import BackgroundObject
 from scene.action_object import ActionObject
