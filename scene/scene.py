@@ -10,9 +10,7 @@ import locations
 
 
 class Scene:
-    '''
-    Игровое поле. Отвечает непосредственно за игровой процесс (декорации, игроки, кнопки).
-    '''
+    """Игровое поле. Отвечает непосредственно за игровой процесс (декорации, игроки, кнопки)."""
 
     def __init__(self, game, location) -> None:
         self.game = game
@@ -38,7 +36,7 @@ class Scene:
         directory = data['directory']
         for sco in data['scene_objects']:
             sco_obj = SceneObject(self, scale(sco['position'], RATIO), directory + sco['image'],
-                              directory + sco['shadow_image'])
+                                  directory + sco['shadow_image'])
             self.camera.apply(sco_obj)
             self.hard_decorations.append(sco_obj)
 
@@ -49,7 +47,7 @@ class Scene:
 
         for actn in data['action_places']:
             actn_obj = ActionObject(self, scale(actn['position'], RATIO),
-                               directory + actn['image'], actn['hint_image'])
+                                    directory + actn['image'], actn['hint_image'])
             action = self.reload_scene
             actn_obj.set_action(action, *actn['args'])
             self.action_places.append(actn_obj)

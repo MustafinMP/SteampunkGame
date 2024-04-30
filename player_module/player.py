@@ -22,14 +22,11 @@ class PlayerSprite(SceneObjectSprite):
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH // 2 - self.rect.width // 2
         self.rect.y = HEIGHT // 2 - self.rect.height // 2
-        self.game_position = [0, 0]
 
     def move_x(self, dx: int) -> None:
-        self.game_position[0] += dx
         self.rect.x += dx
 
     def move_y(self, dy: int) -> None:
-        self.game_position[1] += dy
         self.rect.y += dy
 
     def update_image(self, mv: PlayerMovingVector) -> None:
@@ -45,7 +42,7 @@ class Player(SceneObject):
     def __init__(self, scene) -> None:
         super().__init__(scene, (0, 0), 'shadow.png')
         self.main_sprite = PlayerSprite(scene)
-        self.shadow_sprite = PlayerShadowSprite()
+        self.shadow_sprite = PlayerShadowSprite('shadow.png')
         self.shadow_sprite.update_coord(self.main_sprite.rect)
 
         self.moving_vector = PlayerMovingVector()
@@ -61,12 +58,14 @@ class Player(SceneObject):
         self.shadow_sprite.move_x(dx)
         if not any([obj.collide_shadow(self) for obj in other_objects]):
             self.main_sprite.move_x(dx)
+            self.game_position[0] += dx
         self.shadow_sprite.move_x(-dx)
 
         dy = self.moving_vector.y
         self.shadow_sprite.move_y(dy)
         if not any([obj.collide_shadow(self) for obj in other_objects]):
             self.main_sprite.move_y(dy)
+            self.game_position[1] += dy
         self.shadow_sprite.move_y(-dy)
 
     def keydown(self, key: Key) -> None:

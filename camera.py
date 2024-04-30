@@ -14,17 +14,16 @@ class Camera:
             obj.main_sprite.rect.x = w // 2 - obj.main_sprite.rect.width // 2
             obj.main_sprite.rect.y = h // 2 - obj.main_sprite.rect.height // 2
             return
-        obj.main_sprite.rect.x = obj.main_sprite.game_position[0] + self.dx
-        obj.main_sprite.rect.y = obj.main_sprite.game_position[1] + self.dy
+        obj.main_sprite.rect.x = obj.game_position[0] + self.dx
+        obj.main_sprite.rect.y = obj.game_position[1] + self.dy
 
     def update(self, target):
         self.target = target
         w, h = self.screen_size
-        self.target.main_sprite.rect.x = w // 2 - self.target.main_sprite.rect.width // 2
-        self.target.main_sprite.rect.y = h // 2 - self.target.main_sprite.rect.height // 2
-        self.dx = -(target.main_sprite.game_position[0] - target.main_sprite.rect.x)
-        self.dy = -(target.main_sprite.game_position[
-                        1] - target.main_sprite.rect.y - target.main_sprite.rect.height + RATIO)
+        self.target.main_sprite.rect.x = (w - self.target.main_sprite.rect.width) // 2
+        self.target.main_sprite.rect.y = (h - self.target.main_sprite.rect.height) // 2
+        self.dx = target.main_sprite.rect.x - target.game_position[0]
+        self.dy = target.main_sprite.rect.y + target.main_sprite.rect.height - target.game_position[1] - RATIO
 
     def update_screen_size(self, new_screen_size: (int, int)):
         self.screen_size = new_screen_size
