@@ -3,6 +3,7 @@ import sys
 from all_widgets import menu
 from const import WIDTH, HEIGHT, FPS, Colors, Color
 
+screen_size: tuple[int, int]
 screen_size = width, height = WIDTH, HEIGHT
 pygame.init()
 screen = pygame.display.set_mode(screen_size, pygame.RESIZABLE)
@@ -16,7 +17,7 @@ class Game:
 
     def __init__(self) -> None:
         self.widget = menu.StartMenu(self)
-        self.screen_size = screen_size
+        self.screen_size: tuple[int, int] = screen_size
 
     def draw(self) -> None:
         self.widget.draw(screen)
@@ -31,8 +32,8 @@ class Game:
     def update_screen_size(self, new_screen_size: list[int, int] | tuple[int, int]) -> None:
         self.screen_size = new_screen_size
 
-    def redirect_to(self, widget_) -> None:
-        self.widget = widget_
+    def redirect_to(self, widget) -> None:
+        self.widget = widget
 
     def background_color(self) -> Color:
         return self.widget.background_color

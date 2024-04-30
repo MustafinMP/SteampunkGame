@@ -12,14 +12,14 @@ import locations
 class Scene:
     """Игровое поле. Отвечает непосредственно за игровой процесс (декорации, игроки, кнопки)."""
 
-    def __init__(self, game, location) -> None:
+    def __init__(self, game, location_name: str) -> None:
         self.game = game
 
         self.hard_decorations = []
         self.background_decorations = []
         self.action_places = []
 
-        location_data = locations.get_location_data(location)
+        location_data = locations.get_location_data(location_name)
 
         player_position = scale(location_data['start_position'], RATIO)
         self.player = p_module.Player(self)

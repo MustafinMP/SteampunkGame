@@ -4,7 +4,7 @@ import load_data
 
 
 class ActionButtonsGroup(Group):
-    def update_event(self, event):
+    def update_event(self, event) -> None:
         for button in self.sprites():
             if event.type == pygame.MOUSEBUTTONDOWN and button.collide(event.pos):
                 button.click()
@@ -13,7 +13,7 @@ class ActionButtonsGroup(Group):
 
 
 class ActionButton(Sprite):
-    def __init__(self, widget, pressed_image, not_pressed_image, *group):
+    def __init__(self, widget, pressed_image: str, not_pressed_image: str, *group) -> None:
         super().__init__(*group)
 
         self.widget = widget
@@ -26,7 +26,7 @@ class ActionButton(Sprite):
         self.rect = self.image.get_rect()
         self.action_func = lambda: ...
 
-    def set_coord(self, new_coord: (int, int)) -> None:
+    def set_coord(self, new_coord: list[int, int] | tuple[int, int]) -> None:
         self.rect.x, self.rect.y = new_coord
 
     def set_action(self, func: object) -> None:
@@ -47,12 +47,13 @@ class ActionButton(Sprite):
     def collide(self, pos: (int, int)) -> bool:
         return self.rect.collidepoint(pos)
 
-    def call(self):
+    def call(self) -> None:
         self.action_func()
 
 
 class KeyAction(Sprite):
-    def __init__(self, widget, coord: (int, int), current_image, not_current_image, *group, action=lambda: ...):
+    def __init__(self, widget, coord: list[int, int] | tuple[int, int], current_image: str, not_current_image: str,
+                 *group, action=lambda: ...) -> None:
         super().__init__(*group)
 
         self.widget = widget
@@ -66,15 +67,15 @@ class KeyAction(Sprite):
         self.rect.x, self.rect.y = coord
         self.action_func = action
 
-    def set_status(self, current: bool):
+    def set_status(self, current: bool) -> None:
         self.current = current
         self.image = self.images[self.current]
 
     def set_action(self, func: object) -> None:
         self.action_func = func
 
-    def set_coord(self, new_coord: (int, int)) -> None:
+    def set_coord(self, new_coord: list[int, int] | tuple[int, int]) -> None:
         self.rect.x, self.rect.y = new_coord
 
-    def call(self):
+    def call(self) -> None:
         self.action_func()

@@ -17,7 +17,7 @@ class SceneObject:
     def set_position(self, game_position: list[int, int] | tuple[int, int]) -> None:
         self.game_position = game_position
 
-    def update(self, others:  list[SceneObject] | tuple[SceneObject] = ()) -> None:
+    def update(self, others: list[SceneObject] | tuple[SceneObject] = ()) -> None:
         self.shadow_sprite.update_coord(self.main_sprite.rect)
 
     def collide_shadow(self, other_object: SceneObject) -> bool:
@@ -32,7 +32,7 @@ class SceneObject:
 
 
 class SceneObjectSprite(CustomSprite):
-    def __init__(self, scene, position, image) -> None:
+    def __init__(self, scene, position: list[int, int] | tuple[int, int], image: str) -> None:
         super().__init__()
         self.scene = scene
         self.image = load_data.load_image(image)
@@ -41,12 +41,12 @@ class SceneObjectSprite(CustomSprite):
 
 
 class ShadowSprite(CustomSprite):
-    def __init__(self, shadow_image) -> None:
+    def __init__(self, shadow_image: str) -> None:
         super().__init__()
         self.image = load_data.load_image(shadow_image)
         self.rect = self.image.get_rect()
 
-    def update_coord(self, parent_rect):
+    def update_coord(self, parent_rect) -> None:
         self.rect.x = parent_rect.x
         self.rect.y = parent_rect.bottom - self.rect.height
 

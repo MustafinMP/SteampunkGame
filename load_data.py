@@ -3,9 +3,9 @@ import sys
 import os
 
 
-def load_image(name, colorkey=None):
-    '''Загрузка изображений для спрайтов'''
-    fullname = os.path.join('data/sprites', name)
+def load_image(filename: str, colorkey=None):
+    """Загрузка изображений для спрайтов"""
+    fullname = os.path.join('data/sprites', filename)
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()

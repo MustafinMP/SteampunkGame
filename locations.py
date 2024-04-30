@@ -10,7 +10,7 @@ data = {
     WAREHOUSE: 'data/locations/warehouse.json'}
 
 
-def get_location_data(name):
+def get_location_data(name: str) -> dict:
     location = data[name]
     file = open(location)
     location_data = json.load(file)
