@@ -35,17 +35,17 @@ class Scene:
         self.pause = False
 
     def __init_decorations(self, data: dict) -> None:
-        self.camera.update(self.player.main_sprite)
+        self.camera.update(self.player)
         directory = data['directory']
         for barrier in data['barriers']:
             obj = SceneObject(self, scale(barrier['position'], RATIO), directory + barrier['image'],
                               directory + barrier['shadow_image'])
-            self.camera.apply(obj.main_sprite)
+            self.camera.apply(obj)
             self.hard_decorations.append(obj)
 
         for floor in data['floor']:
             obj = BackgroundObject(self, scale(floor['position'], RATIO), directory + floor['image'])
-            self.camera.apply(obj.main_sprite)
+            self.camera.apply(obj)
             self.background_decorations.append(obj)
 
         for action_place in data['action_places']:
@@ -54,7 +54,7 @@ class Scene:
             action = self.reload_scene
             obj.set_action(action, *action_place['args'])
             self.action_places.append(obj)
-            self.camera.apply(obj.main_sprite)
+            self.camera.apply(obj)
 
     def reload_scene(self, location_name: str) -> None:
         """Используется для перезагрузки сцены при смене локации"""
@@ -98,19 +98,19 @@ class Scene:
     def update(self) -> None:
         self.camera.update_screen_size(self.game.screen_size)
         self.player.update(self.hard_decorations)
-        self.camera.update(self.player.main_sprite)
+        self.camera.update(self.player)
 
         for decoration in self.background_decorations:
-            self.camera.apply(decoration.main_sprite)
+            self.camera.apply(decoration)
             decoration.update()
         for decoration in self.hard_decorations:
-            self.camera.apply(decoration.main_sprite)
+            self.camera.apply(decoration)
             decoration.update()
         for action_place in self.action_places:
-            self.camera.apply(action_place.main_sprite)
+            self.camera.apply(action_place)
             action_place.update()
 
-        self.camera.apply(self.player.main_sprite)
+        self.camera.apply(self.player)
 
     def draw(self, screen) -> None:
         for decoration in self.background_decorations:
