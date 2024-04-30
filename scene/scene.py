@@ -1,7 +1,7 @@
 import pygame
 from geometry_abstractions import scale
 from scene.decorations import Floor, ActionPlace
-from custom_sprite import SceneObject
+from scene.scene_object import SceneObject
 from const import RATIO, Keys
 from camera import Camera
 from player_module import player as p_module
@@ -97,6 +97,7 @@ class Scene:
         self.camera.update_screen_size(self.game.screen_size)
         self.player.update(self.hard_decorations)
         self.camera.update(self.player.main_sprite)
+
         for decoration in self.background_decorations:
             self.camera.apply(decoration)
         for decoration in self.hard_decorations:
@@ -104,6 +105,7 @@ class Scene:
             decoration.update()
         for action_place in self.action_places:
             self.camera.apply(action_place)
+            
         self.camera.apply(self.player.main_sprite)
 
     def draw(self, screen) -> None:

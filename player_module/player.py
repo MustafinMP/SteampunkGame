@@ -1,4 +1,5 @@
-from custom_sprite import CustomSprite, ShadowSprite, SceneObject, SceneObjectSprite
+from custom_sprite import CustomSprite
+from scene.scene_object import ShadowSprite, SceneObject, SceneObjectSprite
 import load_data
 from const import WIDTH, HEIGHT, Key
 from player_module.moving_vector import PlayerMovingVector
@@ -49,10 +50,10 @@ class Player(SceneObject):
 
         self.moving_vector = PlayerMovingVector()
 
-    def update(self, barriers: list[CustomSprite]) -> None:
-        super().update(barriers)
+    def update(self, others: list[SceneObject] | tuple[SceneObject] = ()) -> None:
+        super().update(others)
         self.moving_vector.update()
-        self.move(barriers)
+        self.move(others)
         self.main_sprite.update_image(self.moving_vector)
 
     def move(self, other_objects: list[SceneObject]) -> None:

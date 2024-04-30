@@ -1,4 +1,4 @@
-from custom_sprite import CustomSprite, SceneObject
+from custom_sprite import CustomSprite
 import load_data
 
 
