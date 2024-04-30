@@ -1,8 +1,8 @@
 import pygame
 from geometry_abstractions import scale
-from scene.scene_object import SceneObject
-from scene.background_object import BackgroundObject
-from scene.action_object import ActionObject
+from .scene_object import SceneObject
+from .background_object import BackgroundObject
+from .action_object import ActionObject
 from const import RATIO, Keys
 from camera import Camera
 from player_module import player as p_module
