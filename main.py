@@ -45,9 +45,6 @@ class Game:
     def save_game(self):
         ProgressStorage.save_progress(self.widget)
 
-    def upload_game(self, container_filename: str) -> None:
-        self.widget = ProgressStorage.load_progress(self, 'container1.json')
-
     @staticmethod
     def terminate():
         pygame.quit()

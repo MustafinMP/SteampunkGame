@@ -1,0 +1,59 @@
+{
+  "start_position": [
+    14,
+    80
+  ],
+  "directory": "street/",
+  "scene_objects": [
+    {
+      "image": "main_house1.png",
+      "shadow_image": "main_house1.png",
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "image": "main_house2.png",
+      "shadow_image": "main_house2.png",
+      "position": [
+        35,
+        0
+      ]
+    },
+    {
+      "image": "main_house3.png",
+      "shadow_image": "main_house3.png",
+      "position": [
+        119,
+        0
+      ]
+    },
+    {
+      "image": "main_house_door.png",
+      "shadow_image": "main_house_door.png",
+      "position": [
+        11,
+        0
+      ]
+    },
+    {
+      "image": "main_house_gate.png",
+      "shadow_image": "main_house_gate.png",
+      "position": [
+        46,
+        0
+      ]
+    },
+    {
+      "image": "main_house_top.png",
+      "shadow_image": "main_house_top.png",
+      "position": [
+        -3,
+        -114
+      ]
+    }
+  ],
+  "backgrounds": [],
+  "action_places": []
+}

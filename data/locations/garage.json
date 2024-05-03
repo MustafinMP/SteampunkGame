@@ -118,7 +118,7 @@
         175
       ],
       "action": "redirect",
-      "args": ["WAREHOUSE"],
+      "args": ["STREET"],
       "hint_image": "hint_exit.png"
     }
   ]
