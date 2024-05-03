@@ -1,4 +1,5 @@
 import pygame
+import json
 import sys
 import os
 
@@ -18,3 +19,10 @@ def load_image(filename: str, colorkey=None):
     else:
         image = image.convert_alpha()
     return image
+
+
+def load_game_container(filename: str) -> dict:
+    file = open(filename)
+    container = json.load(file)
+    file.close()
+    return container

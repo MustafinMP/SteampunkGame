@@ -12,16 +12,18 @@ import locations
 class Scene:
     """Игровое поле. Отвечает непосредственно за игровой процесс (декорации, игроки, кнопки)."""
 
-    def __init__(self, game, location_name: str) -> None:
+    def __init__(self, game, location_name: str, player_position=None) -> None:
         self.game = game
+        self.location_name = location_name
 
         self.hard_decorations = []
         self.background_decorations = []
         self.action_places = []
 
         location_data = locations.get_location_data(location_name)
-
-        player_position = scale(location_data['start_position'], RATIO)
+        if player_position is None:
+            player_position = location_data['start_position']
+            player_position = scale(player_position, RATIO)
         self.player = p_module.Player(self)
         self.player.set_position(player_position)
 
@@ -55,6 +57,7 @@ class Scene:
 
     def reload_scene(self, location_name: str) -> None:
         """Используется для перезагрузки сцены при смене локации"""
+        self.location_name = location_name
         self.hard_decorations = []
         self.background_decorations = []
         self.action_places = []
@@ -87,6 +90,8 @@ class Scene:
                 self.player.keydown(move_keys[event.key])
             if event.key == pygame.K_a:  # обработка клавиш взаимодействия
                 self.__update_action_places()
+            if event.key == pygame.K_s:  # обработка клавиш взаимодействия
+                self.game.save_game()
 
         elif event.type == pygame.KEYUP:
             if event.key in move_keys.keys():

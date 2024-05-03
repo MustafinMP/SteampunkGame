@@ -1,41 +1,9 @@
-import pygame
 import main
-from all_widgets.buttons import KeyAction, Group, ActionButton
+from all_widgets.buttons import ActionButton
 from locations import GARAGE
 from all_widgets import widget
 from scene import scene
-from const import Colors
-
-
-class KeyMenu(widget.Widget):
-    """С этим меню можно взаимодействовать только клавиатурой"""
-
-    def __init__(self, game: main.Game) -> None:
-        super().__init__(game)
-        del self.action_buttons
-        self.sprite_group = Group()
-        self.actions: list[KeyAction] = []
-        self.actions_count: int = 0
-        self.current_action_index = 0
-
-    def update_event(self, event) -> None:
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                self.actions[self.current_action_index].set_status(False)
-                self.current_action_index -= 1
-                if self.current_action_index < 0:
-                    self.current_action_index = self.actions_count - 1
-                self.actions[self.current_action_index].set_status(True)
-
-            elif event.key == pygame.K_DOWN:
-                self.actions[self.current_action_index].set_status(False)
-                self.current_action_index += 1
-                if self.current_action_index == self.actions_count:
-                    self.current_action_index = 0
-                self.actions[self.current_action_index].set_status(True)
-
-            elif event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
-                self.actions[self.current_action_index].call()
+from progress_storage import ProgressStorage
 
 
 class StartMenu(widget.Widget):
@@ -62,6 +30,10 @@ class StartMenu(widget.Widget):
 
     def redirect_to_garage(self) -> None:
         """Перемещение в стартовую сцену"""
+        if ProgressStorage.have_containers():
+            container_name = ProgressStorage.last_container()
+            self.game.redirect_to(ProgressStorage.load_progress(self.game, container_name))
+            return
         self.game.redirect_to(scene.Scene(self.game, GARAGE))
 
     def terminate_game(self) -> None:

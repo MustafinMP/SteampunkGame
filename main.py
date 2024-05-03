@@ -1,7 +1,11 @@
 import pygame
 import sys
+
+import load_data
 from all_widgets import menu
+from scene.scene import Scene
 from const import WIDTH, HEIGHT, FPS, Colors, Color
+from progress_storage import ProgressStorage
 
 screen_size: tuple[int, int]
 screen_size = width, height = WIDTH, HEIGHT
@@ -37,6 +41,12 @@ class Game:
 
     def background_color(self) -> Color:
         return self.widget.background_color
+
+    def save_game(self):
+        ProgressStorage.save_progress(self.widget)
+
+    def upload_game(self, container_filename: str) -> None:
+        self.widget = ProgressStorage.load_progress(self, 'container1.json')
 
     @staticmethod
     def terminate():
